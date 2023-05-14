@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp.core
+package ar.edu.utn.frba.mobile.turistapp.core.models
 
 data class MinifiedTour(
     val id: Int,

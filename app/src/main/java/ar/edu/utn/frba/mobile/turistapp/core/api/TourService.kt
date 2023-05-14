@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.mobile.turistapp.core.api
 
-import ar.edu.utn.frba.mobile.turistapp.core.HomeToursResponse
-import retrofit2.Call
+import ar.edu.utn.frba.mobile.turistapp.core.models.HomeToursResponse
 import retrofit2.http.GET
 
 interface TourService {

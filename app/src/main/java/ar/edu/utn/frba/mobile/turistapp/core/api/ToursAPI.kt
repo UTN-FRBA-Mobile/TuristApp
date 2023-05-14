@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.mobile.turistapp.core.api
 
-import ar.edu.utn.frba.mobile.turistapp.core.MinifiedTour
+import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 
 interface ToursAPI {
     suspend fun getHomeTours(): List<MinifiedTour>
