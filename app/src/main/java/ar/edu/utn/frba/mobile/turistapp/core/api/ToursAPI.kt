@@ -1,23 +1,19 @@
-package ar.edu.utn.frba.mobile.turistapp.core
+package ar.edu.utn.frba.mobile.turistapp.core.api
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import ar.edu.utn.frba.mobile.turistapp.core.MinifiedTour
 
 interface ToursAPI {
-    suspend fun getMinifiedTours(): Array<MinifiedTour>
+    suspend fun getHomeTours(): List<MinifiedTour>
 }
 
 class MockToursAPI: ToursAPI {
-    override suspend fun getMinifiedTours(): Array<MinifiedTour> {
-        withContext(Dispatchers.IO) {
-            Thread.sleep(1000)
-        }
-        return sampleTours()
+    override suspend fun getHomeTours(): List<MinifiedTour> {
+        return TourRetriever.retrofit.retrieveHomeTours().tours
     }
 
     companion object {
-        fun sampleTours(): Array<MinifiedTour> {
-            return arrayOf(
+        fun sampleTours(): List<MinifiedTour> {
+            return listOf<MinifiedTour>(
                 MinifiedTour(
                     1,
                     "Buenos Aires City Center",
