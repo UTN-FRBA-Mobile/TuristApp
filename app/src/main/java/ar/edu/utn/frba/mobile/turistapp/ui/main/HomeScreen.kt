@@ -1,0 +1,33 @@
+package ar.edu.utn.frba.mobile.turistapp.ui.main
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import ar.edu.utn.frba.mobile.turistapp.R
+
+@Composable
+fun HomeScreen(onButtonClick: () -> Unit, navController: NavController? = null) {
+    AppScaffold(navController = navController) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(onClick = onButtonClick) {
+                Text(text = stringResource(id = R.string.tours))
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun DefaultPreview() {
+    HomeScreen({})
+}
