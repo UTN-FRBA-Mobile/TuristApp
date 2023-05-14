@@ -23,9 +23,7 @@ private fun App() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {
-            HomeScreen(
-                onButtonClick = { navController.navigate("post") },
-                navController = navController)
+            HomeScreen(navController = navController)
         }
     }
 }
