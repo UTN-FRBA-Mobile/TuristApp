@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp.ui.main
+package ar.edu.utn.frba.mobile.turistapp.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData

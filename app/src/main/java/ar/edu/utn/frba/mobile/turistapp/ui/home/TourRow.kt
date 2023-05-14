@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp.ui.main
+package ar.edu.utn.frba.mobile.turistapp.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

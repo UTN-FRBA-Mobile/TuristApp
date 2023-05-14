@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp.ui.main
+package ar.edu.utn.frba.mobile.turistapp.ui.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.turistapp.core.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.Tour
+import ar.edu.utn.frba.mobile.turistapp.ui.main.AppScaffold
 
 @Composable
 fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavController? = null) {
