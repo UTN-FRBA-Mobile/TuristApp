@@ -4,11 +4,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 interface ToursAPI {
-    suspend fun getTours(): Array<Tour>
+    suspend fun getMinifiedTours(): Array<MinifiedTour>
 }
 
 class MockToursAPI: ToursAPI {
-    override suspend fun getTours(): Array<Tour> {
+    override suspend fun getMinifiedTours(): Array<MinifiedTour> {
         withContext(Dispatchers.IO) {
             Thread.sleep(1000)
         }
@@ -16,23 +16,23 @@ class MockToursAPI: ToursAPI {
     }
 
     companion object {
-        fun sampleTours(): Array<Tour> {
+        fun sampleTours(): Array<MinifiedTour> {
             return arrayOf(
-                Tour(
+                MinifiedTour(
+                    1,
                     "Buenos Aires City Center",
                     "Obelisco, Puerto Madero, La Boca",
-                    "We will begin the tour at the National Congress and then walk along the renowned boulevard of Avenida de Mayo with its magnificent buildings.",
                     setOf("English", "Spanish"),
-                    0.0,
-                    0.0
+                    2.0,
+                    "http://image.url/test.jpg"
                 ),
-                Tour(
+                MinifiedTour(
+                    2,
                     "Buenos Aires City Center 2",
                     "Casa Rosada, Obelisco, Teatro Colón",
-                    "We will begin the tour at the National Congress and then walk along the renowned boulevard of Avenida de Mayo with its magnificent buildings.",
                     setOf("Spanish"),
-                    0.0,
-                    0.0
+                    1.2,
+                    "http://image.url/test.jpg"
                 )
             )
         }

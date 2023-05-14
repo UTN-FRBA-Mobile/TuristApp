@@ -1,11 +1,14 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,21 +18,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ar.edu.utn.frba.mobile.turistapp.core.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.MockToursAPI
-import ar.edu.utn.frba.mobile.turistapp.core.Tour
 
 @Composable
-fun TourRow(tour: Tour) {
+fun TourRow(tour: MinifiedTour) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp).border(1.dp, Color.Gray)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(10.dp)
         ) {
             Box(
-                Modifier.size(size = 80.dp).background(color = Color.Gray)
+                Modifier.size(size = 80.dp)
+                        .background(color = Color.Gray)
             )
             Column(
                 Modifier
@@ -42,8 +46,8 @@ fun TourRow(tour: Tour) {
                         fontWeight = FontWeight.Bold
                     )
                 )
-                Text(text = tour.locationsDescription)
-                Text(text = "8km")
+                Text(text = tour.description)
+                Text(text = tour.distance.toString() + " km")
                 Text(text = tour.languages.joinToString(" | "))
             }
         }

@@ -9,6 +9,6 @@ import kotlinx.coroutines.Dispatchers
 class ToursViewModel(private val toursAPI: ToursAPI = MockToursAPI()): ViewModel() {
     var tours = liveData(Dispatchers.IO) {
         emit(null)
-        emit(toursAPI.getTours())
+        emit(toursAPI.getMinifiedTours())
     }
 }
