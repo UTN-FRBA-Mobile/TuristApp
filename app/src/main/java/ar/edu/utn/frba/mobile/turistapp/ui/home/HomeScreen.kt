@@ -48,10 +48,10 @@ fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavContro
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(10.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(68.dp))
+            Spacer(modifier = Modifier.height(64.dp))
             if (nearbyTours != null && favoriteTours != null) {
                 Tours(nearbyTours, favoriteTours)
             } else {
