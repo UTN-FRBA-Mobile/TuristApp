@@ -3,11 +3,17 @@ package ar.edu.utn.frba.mobile.turistapp.core.api
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 
 interface ToursAPI {
-    suspend fun getHomeTours(): List<MinifiedTour>
+    suspend fun getNearbyTours(): List<MinifiedTour>
+    suspend fun getFavoriteTours(): List<MinifiedTour>
 }
 
 class MockToursAPI: ToursAPI {
-    override suspend fun getHomeTours(): List<MinifiedTour> {
+    override suspend fun getNearbyTours(): List<MinifiedTour> {
+        return TourRetriever.retrofit.retrieveHomeTours().tours
+    }
+
+    override suspend fun getFavoriteTours(): List<MinifiedTour> {
+        // TODO: local favorites
         return TourRetriever.retrofit.retrieveHomeTours().tours
     }
 
