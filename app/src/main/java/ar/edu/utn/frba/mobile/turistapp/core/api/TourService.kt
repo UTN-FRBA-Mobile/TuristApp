@@ -4,6 +4,6 @@ import ar.edu.utn.frba.mobile.turistapp.core.models.HomeToursResponse
 import retrofit2.http.GET
 
 interface TourService {
-    @GET("89be4f51-860a-42eb-b5ec-46fff91896c2")
+    @GET("1499a661-7d85-49a7-8342-ee65c2755733")
     suspend fun retrieveHomeTours(): HomeToursResponse
 }
