@@ -1,10 +1,12 @@
 package ar.edu.utn.frba.mobile.turistapp.core.api
 
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
+import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 
 interface ToursAPI {
     suspend fun getNearbyTours(): List<MinifiedTour>
     suspend fun getFavoriteTours(): List<MinifiedTour>
+    suspend fun getTour(id: Int): TourResponse
 }
 
 class MockToursAPI: ToursAPI {
@@ -15,6 +17,10 @@ class MockToursAPI: ToursAPI {
     override suspend fun getFavoriteTours(): List<MinifiedTour> {
         // TODO: local favorites
         return TourRetriever.retrofit.retrieveHomeTours().tours
+    }
+
+    override suspend fun getTour(id: Int): TourResponse {
+        return TourRetriever.retrofit.retrieveTour(id)
     }
 
     companion object {
