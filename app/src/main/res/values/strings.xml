@@ -2,5 +2,8 @@
     <string name="app_name">TuristApp</string>
     <string name="tours">Tours</string>
     <string name="nearbyTours">Nearby Tours</string>
-    <string name="favorites">Favourites</string>
+    <string name="favorites">Favorites</string>
+    <string name="locations">Locations</string>
+
+    <string name="play">Play</string>
 </resources>
