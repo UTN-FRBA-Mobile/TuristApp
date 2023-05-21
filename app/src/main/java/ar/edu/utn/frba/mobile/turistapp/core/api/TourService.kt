@@ -8,6 +8,6 @@ interface TourService {
     @GET("1499a661-7d85-49a7-8342-ee65c2755733")
     suspend fun retrieveHomeTours(): HomeToursResponse
 
-    @GET("3edf1c4c-a525-4bec-92e6-6bd665fb6401")
-    suspend fun retrieveTour(id: Int): TourResponse
+    @GET("b27e0ca7-ba49-47dc-92e9-4dbfb4be6db1")
+    suspend fun retrieveTour(): TourResponse
 }
