@@ -53,7 +53,7 @@ fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavContro
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             if (nearbyTours != null && favoriteTours != null) {
-                Tours(nearbyTours, favoriteTours)
+                Tours(nearbyTours, favoriteTours, navController)
             } else {
                 Loading()
             }
@@ -62,7 +62,7 @@ fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavContro
 }
 
 @Composable
-fun Tours(nearbyTours: List<MinifiedTour>, favoriteTours: List<MinifiedTour>) {
+fun Tours(nearbyTours: List<MinifiedTour>, favoriteTours: List<MinifiedTour>, navController: NavController? = null) {
     LazyColumn {
         item {
             Text(
@@ -72,7 +72,7 @@ fun Tours(nearbyTours: List<MinifiedTour>, favoriteTours: List<MinifiedTour>) {
             )
         }
         nearbyTours.forEach { tour ->
-            item { TourRow(tour) }
+            item { TourRow(tour, navController) }
         }
         item {
             Text(
@@ -82,7 +82,7 @@ fun Tours(nearbyTours: List<MinifiedTour>, favoriteTours: List<MinifiedTour>) {
             )
         }
         favoriteTours.forEach { tour ->
-            item { TourRow(tour) }
+            item { TourRow(tour, navController) }
         }
     }
 }
