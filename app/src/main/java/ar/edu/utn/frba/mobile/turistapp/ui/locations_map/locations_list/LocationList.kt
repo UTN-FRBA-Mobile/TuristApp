@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,56 +14,53 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ar.edu.utn.frba.mobile.turistapp.R
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 
+
 @Composable
-fun LocationListScreen(locations: List<Location>) {
+fun LocationListScreen(locations: List<Location>, viewModel: LocationListViewModel = viewModel()) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)
     ) {
-    LocationList(locations)
+    LocationList(locations, viewModel)
     }
 }
 
 @Composable
-fun LocationList(locations: List<Location>) {
+fun LocationList(locations: List<Location>, viewModel: LocationListViewModel) {
     LazyColumn(modifier = Modifier
         .background(MaterialTheme.colorScheme.background)
         .padding(8.dp)){
         items(locations) { location ->
-            LocationCard(location)
+            LocationCard(location, viewModel)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
 @Composable
-fun LocationCard(location: Location) {
+fun LocationCard(location: Location, viewModel: LocationListViewModel) {
     val isExpanded = remember { mutableStateOf(false) }
+    // Fetching the local context
+    val mContext = LocalContext.current
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -83,7 +79,7 @@ fun LocationCard(location: Location) {
                 Chip(text = location.proximityLabel)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(text = location.proximityValue.toString() + "m", style = MaterialTheme.typography.bodyMedium)
-                smallPlayerButton()
+                SmallPlayerButton(viewModel, location.audioFileName)
             }
             // If the card is expanded, show the description
             if (isExpanded.value) {
@@ -126,10 +122,16 @@ fun Chip(
 
 
 @Composable
-private fun smallPlayerButton() {
-    Icon(painter = painterResource(R.drawable.ic_play_circle), contentDescription = "Play")
-    //TODO: agregar comportamiento para que cambie a ícono de pausa
+fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
+    val pauseIcon = painterResource(R.drawable.ic_pause)
+    val playCircleIcon = painterResource(R.drawable.ic_play_circle)
+
+    IconButton(onClick = { viewModel.togglePlay(audioFileName) }) {
+        val actualIcon = if (viewModel.isPlaying.value) pauseIcon else playCircleIcon
+        Icon(painter = actualIcon, contentDescription = "Play audio")
+    }
 }
+
 
 
 
@@ -147,7 +149,8 @@ val testLocation: Location = Location(
             "Está ubicada en el barrio de Monserrat de la Ciudad Autónoma de Buenos Aires, frente" +
             " a la histórica Plaza de Mayo. Su denominación oficial es Casa de Gobierno.",
     proximityLabel = "Cerca",
-    proximityValue = 10
+    proximityValue = 10,
+    audioFileName = "audio_test"
 )
 
 val testLocationList = listOf(testLocation, testLocation, testLocation, testLocation, testLocation)
@@ -155,13 +158,15 @@ val testLocationList = listOf(testLocation, testLocation, testLocation, testLoca
 @Preview
 private fun LocationCardPreview() {
 
-    LocationCard(testLocation)
+    LocationCard(testLocation, viewModel())
 }
 
 @Composable
 @Preview
 fun LocationListPreview() {
-    LocationList(testLocationList)
+    LocationList(testLocationList, viewModel())
 }
+
+
 
 

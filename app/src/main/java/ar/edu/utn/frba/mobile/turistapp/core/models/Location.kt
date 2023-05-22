@@ -5,5 +5,6 @@ data class Location (
     val name: String,
     val description: String,
     val proximityLabel: String,
-    val proximityValue: Int
+    val proximityValue: Int,
+    val audioFileName: String
     )
