@@ -23,15 +23,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.turistapp.R
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListPreview
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationList
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.Title
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.testLocationList
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.map.MapScreen
 
 
 @Composable
 @Preview
-fun LocationsMapScreen() {
+fun LocationsMapScreen(viewModel: LocationListViewModel = viewModel(), navController: NavController? = null) {
     BottomSheetScafold(
         contentUnderSheet = {
             MapScreen()
@@ -41,7 +45,7 @@ fun LocationsMapScreen() {
         },
         hiddenContent = {
             //TODO: Cambiar por la lista de locations real
-            LocationListPreview()
+            LocationList(testLocationList, viewModel)
         }
     )
 }

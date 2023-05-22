@@ -1,29 +1,29 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list
 
-import android.content.Context
-import android.media.MediaPlayer
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import ar.edu.utn.frba.mobile.turistapp.core.models.Location
+import ar.edu.utn.frba.mobile.turistapp.core.repository.AudioRepository
+import ar.edu.utn.frba.mobile.turistapp.core.repository.LocationRepository
 
-class LocationListViewModel(private val context: Context) : ViewModel() {
-    private val mediaPlayer = MediaPlayer()
 
+class LocationListViewModel(private val locationRepository: LocationRepository,
+                            private val audioRepository: AudioRepository) : ViewModel() {
+
+    val locations: LiveData<List<Location>> = locationRepository.loadData()
     // State for whether the media is currently playing
     val isPlaying = mutableStateOf(false)
 
     fun togglePlay(audioFileName: String) {
-        val audioFileId: Int = context.resources.getIdentifier(audioFileName, "raw", context.packageName)
+        val audioResourceId = audioRepository.getAudioResourceId(audioFileName)
 
         if (!isPlaying.value) {
-            if (!mediaPlayer.isPlaying) {
-                mediaPlayer.reset()
-                val afd = context.resources.openRawResourceFd(audioFileId)
-                mediaPlayer.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
-                mediaPlayer.prepare()
+            if (!audioRepository.isPlaying()) {
+                audioRepository.playAudio(audioResourceId)
             }
-            mediaPlayer.start()
         } else {
-            mediaPlayer.pause()
+            audioRepository.pauseAudio()
         }
 
         isPlaying.value = !isPlaying.value
@@ -31,6 +31,6 @@ class LocationListViewModel(private val context: Context) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        mediaPlayer.release()
+        audioRepository.releasePlayer()
     }
 }
