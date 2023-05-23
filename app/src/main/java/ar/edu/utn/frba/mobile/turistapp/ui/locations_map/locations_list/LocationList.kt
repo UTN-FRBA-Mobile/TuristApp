@@ -35,29 +35,29 @@ import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 
 
 @Composable
-fun LocationListScreen(locations: List<Location>, viewModel: LocationListViewModel = viewModel()) {
+fun LocationListScreen(locations: List<Location>) {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)
     ) {
-    LocationList(locations, viewModel)
+        LocationList(locations)
     }
 }
 
 @Composable
-fun LocationList(locations: List<Location>, viewModel: LocationListViewModel) {
+fun LocationList(locations: List<Location>) {
     LazyColumn(modifier = Modifier
         .background(MaterialTheme.colorScheme.background)
         .padding(8.dp)){
         items(locations) { location ->
-            LocationCard(location, viewModel)
+            LocationCard(location)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
 @Composable
-fun LocationCard(location: Location, viewModel: LocationListViewModel) {
+fun LocationCard(location: Location) {
     val isExpanded = remember { mutableStateOf(false) }
     // Fetching the local context
     val mContext = LocalContext.current
@@ -79,7 +79,6 @@ fun LocationCard(location: Location, viewModel: LocationListViewModel) {
                 Chip(text = location.proximityLabel)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(text = location.proximityValue.toString() + "m", style = MaterialTheme.typography.bodyMedium)
-                SmallPlayerButton(viewModel, location.audioFileName)
             }
             // If the card is expanded, show the description
             if (isExpanded.value) {
@@ -119,8 +118,6 @@ fun Chip(
     }
 }
 
-
-
 @Composable
 fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
     val pauseIcon = painterResource(R.drawable.ic_pause)
@@ -131,13 +128,6 @@ fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
         Icon(painter = actualIcon, contentDescription = "Play audio")
     }
 }
-
-
-
-
-
-
-
 
 
 //********************** PREVIEWS **********************//
@@ -158,13 +148,13 @@ val testLocationList = listOf(testLocation, testLocation, testLocation, testLoca
 @Preview
 private fun LocationCardPreview() {
 
-    LocationCard(testLocation, viewModel())
+    LocationCard(testLocation)
 }
 
 @Composable
 @Preview
 fun LocationListPreview() {
-    LocationList(testLocationList, viewModel())
+    LocationList(testLocationList)
 }
 
 
