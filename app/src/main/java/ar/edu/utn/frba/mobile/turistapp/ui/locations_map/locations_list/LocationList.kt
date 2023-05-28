@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ar.edu.utn.frba.mobile.turistapp.R
+import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 
 
@@ -125,36 +126,23 @@ fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
 
     IconButton(onClick = { viewModel.togglePlay(audioFileName) }) {
         val actualIcon = if (viewModel.isPlaying.value) pauseIcon else playCircleIcon
-        Icon(painter = actualIcon, contentDescription = "Play audio")
+        Icon(painter = actualIcon, contentDescription = R.string.play_audio.toString())
     }
 }
 
 
 //********************** PREVIEWS **********************//
-
-val testLocation: Location = Location(
-    order = 1,
-    name = "Casa Rosada",
-    description = "La Casa Rosada es la sede del Poder Ejecutivo de la República Argentina. " +
-            "Está ubicada en el barrio de Monserrat de la Ciudad Autónoma de Buenos Aires, frente" +
-            " a la histórica Plaza de Mayo. Su denominación oficial es Casa de Gobierno.",
-    proximityLabel = "Cerca",
-    proximityValue = 10,
-    audioFileName = "audio_test"
-)
-
-val testLocationList = listOf(testLocation, testLocation, testLocation, testLocation, testLocation)
 @Composable
 @Preview
 private fun LocationCardPreview() {
 
-    LocationCard(testLocation)
+    LocationCard(LocationAPIWithRetrofit.sampleLocation())
 }
 
 @Composable
 @Preview
 fun LocationListPreview() {
-    LocationList(testLocationList)
+    LocationList(LocationAPIWithRetrofit.sampleLocations())
 }
 
 

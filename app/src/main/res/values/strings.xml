@@ -5,5 +5,8 @@
     <string name="favorites">Favorites</string>
     <string name="locations">Locations</string>
 
-    <string name="play">Play</string>
+    <string name="play_audio">Play audio</string>
+    <string name="pause_audio">Pause audio</string>
+    <string name="stop_audio">Stop audio</string>
+    <string name="show_tour_locations">Show tour locations</string>
 </resources>

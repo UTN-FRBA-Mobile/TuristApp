@@ -1,5 +1,6 @@
 package ar.edu.utn.frba.mobile.turistapp
 
+import MapScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,14 @@ private fun App() {
             val tourId: Int? = backStackEntry.arguments?.getInt("tourId")
             if (tourId is Int)
                 TourScreen(tourId, navController)
+        }
+        composable(
+            route = "map/{tourId}",
+            arguments = listOf(navArgument("tourId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val tourId = backStackEntry.arguments?.getInt("tourId")
+            if (tourId is Int)
+                MapScreen(tourId, navController)
         }
     }
 }

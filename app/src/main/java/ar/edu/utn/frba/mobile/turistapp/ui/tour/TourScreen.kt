@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
@@ -104,7 +105,8 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
     LazyColumn {
         item {
             Box(
-                Modifier.size(width = screenWidth, height = 250.dp)
+                Modifier
+                    .size(width = screenWidth, height = 250.dp)
                     .background(color = Color.Gray)
             ) {
                 AsyncImage(
@@ -112,6 +114,15 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds
                 )
+                IconButton(onClick = { navController?.navigate("map/${tour.id}") },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_play_circle),
+                        contentDescription = R.string.show_tour_locations.toString()
+                    )
+                }
             }
             Text(
                 text = tour.title,
