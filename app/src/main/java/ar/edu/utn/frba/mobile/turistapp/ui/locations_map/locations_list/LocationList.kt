@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -126,7 +127,7 @@ fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
 
     IconButton(onClick = { viewModel.togglePlay(audioFileName) }) {
         val actualIcon = if (viewModel.isPlaying.value) pauseIcon else playCircleIcon
-        Icon(painter = actualIcon, contentDescription = R.string.play_audio.toString())
+        Icon(painter = actualIcon, contentDescription = stringResource(id = R.string.play_audio))
     }
 }
 
