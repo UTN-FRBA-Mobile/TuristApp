@@ -115,7 +115,7 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                 )
                 IconButton(onClick = { navController?.navigate("map/${tour.id}") },
                     modifier = Modifier
-                        .align(Alignment.BottomEnd).offset(y = 26.dp, x = (-8.dp)).size(55.dp)
+                        .align(Alignment.BottomEnd).offset(y = (-8.dp), x = (-8.dp)).size(55.dp)
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_play_circle_green),
