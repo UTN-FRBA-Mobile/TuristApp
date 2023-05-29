@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.tour
 
 import android.annotation.SuppressLint
-import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,12 +9,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
@@ -117,11 +115,13 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                 )
                 IconButton(onClick = { navController?.navigate("map/${tour.id}") },
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
+                        .align(Alignment.BottomEnd).offset(y = 26.dp, x = (-8.dp)).size(55.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_play_circle),
-                        contentDescription = stringResource(id = R.string.show_tour_locations)
+                        painter = painterResource(R.drawable.ic_play_circle_green),
+                        contentDescription = stringResource(id = R.string.show_tour_locations),
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(55.dp)
                     )
                 }
             }
@@ -150,22 +150,7 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                         text = tour.ratingCount.toString() + " ratings",
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    LazyRow(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
-                        items(count = tour.rating) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_star),
-                                contentDescription = null,
-                                modifier = Modifier.height(18.dp)
-                            )
-                        }
-                        items(count = 5 - tour.rating) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_star_empty),
-                                contentDescription = null,
-                                modifier = Modifier.height(18.dp)
-                            )
-                        }
-                    }
+                    Stars(tour.rating)
                 }
             }
             Text(
@@ -201,11 +186,7 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
             )
             tour.reviews.forEach { review ->
-                Text(
-                    text = review.stars.toString(),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
-                )
+                Stars(review.stars)
                 Text(
                     text = review.text,
                     style = MaterialTheme.typography.bodyLarge,
@@ -224,6 +205,26 @@ fun Loading() {
         modifier = Modifier.fillMaxSize()
     ) {
         CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun Stars(number: Int) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
+        items(count = number) {
+            Image(
+                painter = painterResource(R.drawable.ic_star),
+                contentDescription = null,
+                modifier = Modifier.height(18.dp)
+            )
+        }
+        items(count = 5 - number) {
+            Image(
+                painter = painterResource(R.drawable.ic_star_empty),
+                contentDescription = null,
+                modifier = Modifier.height(18.dp)
+            )
+        }
     }
 }
 
