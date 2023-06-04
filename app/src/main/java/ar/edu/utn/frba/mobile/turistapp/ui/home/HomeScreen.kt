@@ -30,13 +30,19 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavController? = null) {
     val nearbyToursState = viewModel.nearbyTours.observeAsState()
     val favoriteToursState = viewModel.favoriteTours.observeAsState()
     val nearbyTours = nearbyToursState.value
     val favoriteTours = favoriteToursState.value
+    HomeScreenView(nearbyTours, favoriteTours, navController)
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreenView(nearbyTours: List<MinifiedTour>?, favoriteTours: List<MinifiedTour>?, navController: NavController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -48,7 +54,9 @@ fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavContro
         }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(64.dp))
@@ -100,5 +108,5 @@ fun Loading() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    Tours(MockToursAPI.sampleTours(), MockToursAPI.sampleTours())
+    HomeScreenView(MockToursAPI.sampleTours(), MockToursAPI.sampleTours())
 }
