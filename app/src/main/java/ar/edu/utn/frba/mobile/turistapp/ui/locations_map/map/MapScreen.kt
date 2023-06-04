@@ -1,14 +1,18 @@
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -147,7 +152,7 @@ fun MapDescription(tour: TourResponse, locations: List<Location>, navController:
     }*/
 
     BottomSheetScaffold(
-        mapScreen = { Text(text = "Google Maps") },
+        mapScreen = { MyGoogleMaps() },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },
         listContent = { LocationListScreen(locations) }
     )
@@ -175,7 +180,7 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
-        sheetPeekHeight = 512.dp,
+        sheetPeekHeight = 60.dp,
         sheetContent = {
             Box(
                 Modifier
@@ -194,11 +199,10 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
             }
         }) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
-            mapScreen()
+            MyGoogleMaps()
         }
     }
 }
-
 
 
 //********************** PREVIEWS **********************//
