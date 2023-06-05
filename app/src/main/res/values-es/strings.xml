@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TuristApp</string>
+    <string name="tours">Tours</string>
+    <string name="nearbyTours">Tours Cercanos</string>
+    <string name="favorites">Favoritos</string>
+    <string name="locations">Ubicaciones</string>
+
+    <string name="selectLanguage">Seleccionar idioma</string>
+    <string name="confirm">Confirm</string>
+    <string name="english">Inglés</string>
+    <string name="spanish">Español</string>
+
+    <string name="play_audio">Reproducir audio</string>
+    <string name="pause_audio">Pausar audio</string>
+    <string name="stop_audio">Detener audio</string>
+    <string name="show_tour_locations">Mostrar ubicaciones</string>
+</resources>
