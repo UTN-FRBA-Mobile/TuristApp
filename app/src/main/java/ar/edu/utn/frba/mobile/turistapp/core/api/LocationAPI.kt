@@ -2,7 +2,6 @@ package ar.edu.utn.frba.mobile.turistapp.core.api
 
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 
-
 interface LocationAPI {
     suspend fun getTourLocations(id: Int): List<Location>
 }

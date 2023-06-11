@@ -25,4 +25,8 @@ object LocaleUtils {
     fun currentLocale(): AvailableLanguages {
         return AvailableLanguages.values().find { it.code == Locale.getDefault().language } ?: AvailableLanguages.English
     }
+
+    fun currentLocaleCode(): String {
+        return currentLocale().code
+    }
 }

@@ -1,53 +1,34 @@
 import android.annotation.SuppressLint
-import android.media.MediaPlayer
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.BottomSheetScaffoldState
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,13 +38,13 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModelFactory
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.Title
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -73,13 +54,14 @@ fun MapScreen(tourId: Int, navController: NavController? = null) {
     val tourState = tourViewModel.tour.observeAsState()
     val tour = tourState.value
     val locations = locationListViewModel.locations.observeAsState().value
-    MapsScreenView(tour, locations, navController)
+    val audioPlayer = AudioPlayer()
+    MapsScreenView(tour, locations, audioPlayer, navController)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
+fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, audioPlayer: AudioPlayer, navController: NavController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -115,7 +97,7 @@ fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, navControlle
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             if (tour != null && locations != null) {
-                MapDescription(tour, locations, navController)
+                MapDescription(tour, locations, audioPlayer)
             } else {
                 Loading()
             }
@@ -125,7 +107,7 @@ fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, navControlle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapDescription(tour: TourResponse, locations: List<Location>, navController: NavController? = null) {
+fun MapDescription(tour: TourResponse, locations: List<Location>, audioPlayer: AudioPlayer) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
@@ -154,7 +136,7 @@ fun MapDescription(tour: TourResponse, locations: List<Location>, navController:
     BottomSheetScaffold(
         mapScreen = { MyGoogleMaps() },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },
-        listContent = { LocationListScreen(locations) }
+        listContent = { LocationListScreen(tour, locations, audioPlayer) }
     )
 
 }
@@ -210,5 +192,5 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
 @Composable
 @Preview(showBackground = true)
 fun MapScreenPreview() {
-    MapsScreenView(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations())
+    MapsScreenView(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations(), AudioPlayer())
 }

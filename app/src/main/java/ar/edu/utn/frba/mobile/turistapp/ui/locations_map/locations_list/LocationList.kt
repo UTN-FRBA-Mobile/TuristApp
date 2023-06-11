@@ -1,11 +1,8 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list
 
-import android.content.Context
-import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,50 +27,46 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ar.edu.utn.frba.mobile.turistapp.R
 import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
+import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
+import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
 
 
 @Composable
-fun LocationListScreen(locations: List<Location>) {
+fun LocationListScreen(tour: TourResponse, locations: List<Location>, audioPlayer: AudioPlayer) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        LocationList(locations)
+        LocationList(tour, locations, audioPlayer)
     }
 }
 
 @Composable
-fun LocationList(locations: List<Location>) {
+fun LocationList(tour: TourResponse, locations: List<Location>, audioPlayer: AudioPlayer) {
     LazyColumn(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .padding(8.dp)
     ) {
         items(locations) { location ->
-            LocationCard(location)
+            LocationCard(tour, location, audioPlayer)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
 @Composable
-fun LocationCard(location: Location) {
+fun LocationCard(tour: TourResponse, location: Location, audioPlayer: AudioPlayer) {
     val isExpanded = remember { mutableStateOf(false) }
-    // Fetching the local context
-    val mContext = LocalContext.current
-    // Declaring and Initializing
-    // the MediaPlayer to play "audio.mp3"
-    val mMediaPlayer = ChooseMusicToPlay(location.order,mContext)
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -100,7 +93,7 @@ fun LocationCard(location: Location) {
                     text = location.proximityValue.toString() + "m",
                     style = MaterialTheme.typography.bodyMedium
                 )
-                AudioButton(mContext, mMediaPlayer)
+                AudioButton(tour, location, audioPlayer)
             }
             // If the card is expanded, show the description
             if (isExpanded.value) {
@@ -111,33 +104,13 @@ fun LocationCard(location: Location) {
     }
 }
 
-@Composable
-fun ChooseMusicToPlay(value: Int, mContext: Context): MediaPlayer {
-    var audioResource: Int? = null
-    when (value) {
-        1 -> {
-            audioResource = R.raw.audio_test
-        }
-        2,3 -> {
-            audioResource = R.raw.aplausos
-        }
-    }
-    return remember {
-        if (audioResource != null) {
-            MediaPlayer.create(mContext, audioResource)
-        } else {
-            throw ArithmeticException("No Audio Found")
-        }
-    }
-}
-
 // Creating a composable function to
 // create two icon buttons namely play and pause
 // Calling this function as content in the above function
 @Composable
-fun AudioButton(context: Context, mMediaPlayer: MediaPlayer) {
+fun AudioButton(tour: TourResponse, location: Location, audioPlayer: AudioPlayer) {
 
-    IconButton(onClick = { mMediaPlayer.start() }) {
+    IconButton(onClick = { audioPlayer.play(tour, location) }) {
         Icon(
             painter = painterResource(R.drawable.ic_play_circle_green),
             contentDescription = stringResource(id = R.string.play_audio),
@@ -145,7 +118,7 @@ fun AudioButton(context: Context, mMediaPlayer: MediaPlayer) {
             modifier = Modifier.size(30.dp)
         )
     }
-    IconButton(onClick = { mMediaPlayer.pause() }) {
+    IconButton(onClick = { audioPlayer.pause() }) {
         Icon(
             painter = painterResource(id = R.drawable.ic_pause),
             contentDescription = stringResource(id = R.string.pause_audio),
@@ -183,7 +156,7 @@ fun Chip(
     }
 }
 
-@Composable
+/*@Composable
 fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
     val pauseIcon = painterResource(R.drawable.ic_pause)
     val playCircleIcon = painterResource(R.drawable.ic_play_circle)
@@ -192,7 +165,7 @@ fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
         val actualIcon = if (viewModel.isPlaying.value) pauseIcon else playCircleIcon
         Icon(painter = actualIcon, contentDescription = stringResource(id = R.string.play_audio))
     }
-}
+}*/
 
 
 //********************** PREVIEWS **********************//
@@ -200,13 +173,13 @@ fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
 @Preview
 private fun LocationCardPreview() {
 
-    LocationCard(LocationAPIWithRetrofit.sampleLocation())
+    LocationCard(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocation(), AudioPlayer())
 }
 
 @Composable
 @Preview
 fun LocationListPreview() {
-    LocationList(LocationAPIWithRetrofit.sampleLocations())
+    LocationList(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations(), AudioPlayer())
 }
 
 
