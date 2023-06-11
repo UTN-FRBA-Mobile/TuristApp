@@ -3,6 +3,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +39,6 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
-import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModelFactory
@@ -50,18 +50,17 @@ import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
 @Composable
 fun MapScreen(tourId: Int, navController: NavController? = null) {
     val tourViewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
-    val locationListViewModel: LocationListViewModel = viewModel(factory = LocationListViewModelFactory(tourId = tourId, LocalContext.current))
+    val locationListViewModel: LocationListViewModel = viewModel(factory = LocationListViewModelFactory(tourId = tourId))
     val tourState = tourViewModel.tour.observeAsState()
     val tour = tourState.value
     val locations = locationListViewModel.locations.observeAsState().value
-    val audioPlayer = AudioPlayer()
-    MapsScreenView(tour, locations, audioPlayer, navController)
+    MapsScreenView(tour, locations, navController)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, audioPlayer: AudioPlayer, navController: NavController? = null) {
+fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -97,7 +96,7 @@ fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, audioPlayer:
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             if (tour != null && locations != null) {
-                MapDescription(tour, locations, audioPlayer)
+                MapDescription(tour, locations)
             } else {
                 Loading()
             }
@@ -107,36 +106,15 @@ fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, audioPlayer:
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapDescription(tour: TourResponse, locations: List<Location>, audioPlayer: AudioPlayer) {
+fun MapDescription(tour: TourResponse, locations: List<Location>) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
 
-/*    LazyColumn {
-        item {
-            Box(
-                Modifier
-                    .size(width = screenWidth, height = 250.dp)
-                    .background(color = Color.Gray)
-            ) {
-                //  GoogleMapsScreen() <-- google maps
-            }
-        }
-        item {
-            Box(
-                Modifier
-                    .size(width = screenWidth, height = 250.dp)
-                    .background(color = Color.Gray)
-            ) {
-                LocationListScreen(locations)
-            }
-        }
-    }*/
-
     BottomSheetScaffold(
         mapScreen = { MyGoogleMaps() },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },
-        listContent = { LocationListScreen(tour, locations, audioPlayer) }
+        listContent = { LocationListScreen(tour, locations) }
     )
 
 }
@@ -163,17 +141,18 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = 60.dp,
+        sheetSwipeEnabled = true,
         sheetContent = {
             Box(
                 Modifier
-                    .fillMaxWidth()
-                    .height(128.dp),
+                    .padding(0.dp),
                 contentAlignment = Alignment.Center
             ) {
                 listTitle()
             }
             Column(
                 Modifier
+                    .padding(0.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -181,8 +160,9 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
             }
         }) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
-            MyGoogleMaps()
+            mapScreen()
         }
+
     }
 }
 
@@ -192,5 +172,16 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
 @Composable
 @Preview(showBackground = true)
 fun MapScreenPreview() {
-    MapsScreenView(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations(), AudioPlayer())
+    MapsScreenView(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations())
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(showBackground = true)
+fun BottomSheetScaffoldPreview() {
+    BottomSheetScaffold(
+        mapScreen = { Text(text = "Google Maps") },
+        listTitle = { Text(text = stringResource(id = R.string.locations)) },
+        listContent = { LocationListScreen(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations()) }
+    )
 }

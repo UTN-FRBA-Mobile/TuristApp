@@ -22,11 +22,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,32 +43,32 @@ import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
 
 
 @Composable
-fun LocationListScreen(tour: TourResponse, locations: List<Location>, audioPlayer: AudioPlayer) {
+fun LocationListScreen(tour: TourResponse, locations: List<Location>) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        LocationList(tour, locations, audioPlayer)
+        LocationList(tour, locations)
     }
 }
 
 @Composable
-fun LocationList(tour: TourResponse, locations: List<Location>, audioPlayer: AudioPlayer) {
+fun LocationList(tour: TourResponse, locations: List<Location>) {
     LazyColumn(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .padding(8.dp)
     ) {
         items(locations) { location ->
-            LocationCard(tour, location, audioPlayer)
+            LocationCard(tour, location)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
 @Composable
-fun LocationCard(tour: TourResponse, location: Location, audioPlayer: AudioPlayer) {
+fun LocationCard(tour: TourResponse, location: Location) {
     val isExpanded = remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -93,7 +96,7 @@ fun LocationCard(tour: TourResponse, location: Location, audioPlayer: AudioPlaye
                     text = location.proximityValue.toString() + "m",
                     style = MaterialTheme.typography.bodyMedium
                 )
-                AudioButton(tour, location, audioPlayer)
+                AudioButton(tour, location)
             }
             // If the card is expanded, show the description
             if (isExpanded.value) {
@@ -108,21 +111,25 @@ fun LocationCard(tour: TourResponse, location: Location, audioPlayer: AudioPlaye
 // create two icon buttons namely play and pause
 // Calling this function as content in the above function
 @Composable
-fun AudioButton(tour: TourResponse, location: Location, audioPlayer: AudioPlayer) {
+fun AudioButton(tour: TourResponse, location: Location) {
+    val audioPlayer = AudioPlayer()
+    val isPlaying by audioPlayer.isPlaying.collectAsState()
+    val playIcon = painterResource(R.drawable.ic_play_circle_green)
+    val pauseIcon = painterResource(R.drawable.ic_pause)
 
-    IconButton(onClick = { audioPlayer.play(tour, location) }) {
+    IconButton(
+        onClick = {
+            if (isPlaying) audioPlayer.pause()
+            else
+                audioPlayer.play(tour, location)
+        }
+    ) {
         Icon(
-            painter = painterResource(R.drawable.ic_play_circle_green),
-            contentDescription = stringResource(id = R.string.play_audio),
+            painter = if (isPlaying) pauseIcon else playIcon,
+            contentDescription = if (isPlaying) stringResource(id = R.string.pause_audio)
+                                    else stringResource(id = R.string.play_audio),
             tint = Color.Unspecified,
             modifier = Modifier.size(30.dp)
-        )
-    }
-    IconButton(onClick = { audioPlayer.pause() }) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_pause),
-            contentDescription = stringResource(id = R.string.pause_audio),
-            Modifier.size(30.dp)
         )
     }
 }
@@ -156,30 +163,17 @@ fun Chip(
     }
 }
 
-/*@Composable
-fun SmallPlayerButton(viewModel: LocationListViewModel, audioFileName: String) {
-    val pauseIcon = painterResource(R.drawable.ic_pause)
-    val playCircleIcon = painterResource(R.drawable.ic_play_circle)
-
-    IconButton(onClick = { viewModel.togglePlay(audioFileName) }) {
-        val actualIcon = if (viewModel.isPlaying.value) pauseIcon else playCircleIcon
-        Icon(painter = actualIcon, contentDescription = stringResource(id = R.string.play_audio))
-    }
-}*/
-
-
 //********************** PREVIEWS **********************//
 @Composable
 @Preview
 private fun LocationCardPreview() {
-
-    LocationCard(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocation(), AudioPlayer())
+    LocationCard(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocation())
 }
 
 @Composable
 @Preview
 fun LocationListPreview() {
-    LocationList(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations(), AudioPlayer())
+    LocationList(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations())
 }
 
 
