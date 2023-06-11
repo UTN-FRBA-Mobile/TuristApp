@@ -10,6 +10,11 @@
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
 
+    <string name="ratings">ratings</string>
+    <string name="duration">Duration</string>
+    <string name="languages">Languages</string>
+    <string name="reviews">Reviews</string>
+
     <string name="play_audio">Play audio</string>
     <string name="pause_audio">Pause audio</string>
     <string name="stop_audio">Stop audio</string>

@@ -98,7 +98,6 @@ fun TourScreenView(tour: TourResponse?, navController: NavController? = null) {
 @Composable
 fun Tour(tour: TourResponse, navController: NavController? = null) {
     val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
 
     LazyColumn {
@@ -115,7 +114,9 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                 )
                 IconButton(onClick = { navController?.navigate("map/${tour.id}") },
                     modifier = Modifier
-                        .align(Alignment.BottomEnd).offset(y = (-8.dp), x = (-8.dp)).size(55.dp)
+                        .align(Alignment.BottomEnd)
+                        .offset(y = (-8.dp), x = (-8.dp))
+                        .size(55.dp)
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_play_circle_green),
@@ -147,24 +148,24 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                 )
                 Column(horizontalAlignment = Alignment.Start, verticalArrangement = Arrangement.Center, modifier = Modifier.padding(horizontal = 0.dp, vertical = 12.dp)) {
                     Text(
-                        text = tour.ratingCount.toString() + " ratings",
+                        text = tour.ratingCount.toString() + " " + stringResource(R.string.ratings),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Stars(tour.rating)
                 }
             }
             Text(
-                text = "Duration: " + tour.duration,
+                text = stringResource(R.string.duration) + ": " + tour.duration,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
             )
             Text(
-                text = "Languages: " + tour.languages.joinToString(" | "),
+                text = stringResource(R.string.languages) + ": " + tour.languages.joinToString(" | "),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
             )
             Text(
-                text = "Locations",
+                text = stringResource(R.string.locations),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 25.sp,
@@ -179,7 +180,7 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                 )
             }
             Text(
-                text = "Reviews",
+                text = stringResource(R.string.reviews),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleLarge,
                 fontSize = 25.sp,
