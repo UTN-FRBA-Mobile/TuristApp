@@ -1,9 +1,9 @@
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,28 +38,35 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
+import ar.edu.utn.frba.mobile.turistapp.MapState
+import ar.edu.utn.frba.mobile.turistapp.MapViewModel
+import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters.ZoneClusterManager
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModelFactory
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.Title
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLngBounds
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MapScreen(tourId: Int, navController: NavController? = null) {
+fun MapScreen(viewModel: MapViewModel, state: MapState,
+              setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
+              calculateZoneViewCenter: () -> LatLngBounds, tourId: Int, navController: NavController? = null) {
     val tourViewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val locationListViewModel: LocationListViewModel = viewModel(factory = LocationListViewModelFactory(tourId = tourId))
     val tourState = tourViewModel.tour.observeAsState()
     val tour = tourState.value
     val locations = locationListViewModel.locations.observeAsState().value
-    MapsScreenView(tour, locations, navController)
+    MapsScreenView(viewModel, tour, locations, navController)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
+fun MapsScreenView(viewModel: MapViewModel, tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -96,7 +102,7 @@ fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, navControlle
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             if (tour != null && locations != null) {
-                MapDescription(tour, locations)
+                MapDescription(viewModel, tour, locations)
             } else {
                 Loading()
             }
@@ -106,13 +112,15 @@ fun MapsScreenView(tour: TourResponse?, locations: List<Location>?, navControlle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapDescription(tour: TourResponse, locations: List<Location>) {
+fun MapDescription(viewModel: MapViewModel, tour: TourResponse, locations: List<Location>) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
 
     BottomSheetScaffold(
-        mapScreen = { MyGoogleMaps() },
+        mapScreen = { MyGoogleMaps(state = viewModel.state.value,
+            setupClusterManager = viewModel::setupClusterManager,
+            calculateZoneViewCenter = viewModel::calculateZoneLatLngBounds) },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },
         listContent = { LocationListScreen(tour, locations) }
     )
@@ -169,11 +177,7 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
 
 //********************** PREVIEWS **********************//
 
-@Composable
-@Preview(showBackground = true)
-fun MapScreenPreview() {
-    MapsScreenView(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations())
-}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
