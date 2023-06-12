@@ -57,7 +57,6 @@ fun LocationListScreen(tour: TourResponse, locations: List<Location>) {
 fun LocationList(tour: TourResponse, locations: List<Location>) {
     LazyColumn(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
             .padding(8.dp)
     ) {
         items(locations) { location ->
