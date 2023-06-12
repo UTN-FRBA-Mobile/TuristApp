@@ -52,9 +52,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MapScreen(viewModel: MapViewModel, state: MapState,
-              setupClusterManager: (Context, GoogleMap) -> ZoneClusterManager,
-              calculateZoneViewCenter: () -> LatLngBounds, tourId: Int, navController: NavController? = null) {
+fun MapScreen(viewModel: MapViewModel, tourId: Int, navController: NavController? = null) {
     val tourViewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val locationListViewModel: LocationListViewModel = viewModel(factory = LocationListViewModelFactory(tourId = tourId))
     val tourState = tourViewModel.tour.observeAsState()
@@ -118,7 +116,7 @@ fun MapDescription(viewModel: MapViewModel, tour: TourResponse, locations: List<
     val screenWidth = configuration.screenWidthDp.dp
 
     BottomSheetScaffold(
-        mapScreen = { MyGoogleMaps(state = viewModel.state.value,
+        mapScreen = { GoogleMapScreen(state = viewModel.state.value,
             setupClusterManager = viewModel::setupClusterManager,
             calculateZoneViewCenter = viewModel::calculateZoneLatLngBounds) },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },

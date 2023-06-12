@@ -78,9 +78,7 @@ private fun App(viewModel: MapViewModel) {
         ) { backStackEntry ->
             val tourId = backStackEntry.arguments?.getInt("tourId")
             if (tourId is Int)
-                MapScreen(viewModel, state = viewModel.state.value,
-                    setupClusterManager = viewModel::setupClusterManager,
-                    calculateZoneViewCenter = viewModel::calculateZoneLatLngBounds, tourId, navController)
+                MapScreen(viewModel, tourId, navController)
         }
     }
 }
