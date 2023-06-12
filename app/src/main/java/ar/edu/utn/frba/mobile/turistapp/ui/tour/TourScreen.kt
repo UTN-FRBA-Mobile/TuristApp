@@ -187,12 +187,19 @@ fun Tour(tour: TourResponse, navController: NavController? = null) {
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
             )
             tour.reviews.forEach { review ->
-                Stars(review.stars)
+                Box(
+                    Modifier.padding(horizontal = 10.dp, vertical = 0.dp)
+                ) {
+                    Stars(review.stars)
+                }
                 Text(
                     text = review.text,
                     style = MaterialTheme.typography.bodyLarge,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+                )
+                Box(
+                    Modifier.padding(vertical = 8.dp)
                 )
             }
         }
