@@ -27,25 +27,37 @@ class MapViewModel @Inject constructor(): ViewModel() {
             clusterItems = listOf(
                 ZoneClusterItem(
                     id = "zone-1",
-                    title = "Zone 1",
-                    snippet = "This is Zone 1.",
+                    title = "Obelisco de Buenos Aires",
+                    snippet = "Este es el Obelisco de Buenos Aires",
                     polygonOptions = polygonOptions {
-                        add(LatLng(49.105, -122.524))
-                        add(LatLng(49.101, -122.529))
-                        add(LatLng(49.092, -122.501))
-                        add(LatLng(49.1, -122.506))
+                        add(LatLng(-34.602528, -58.382261))
+                        add(LatLng(-34.602580, -58.381061))
+                        add(LatLng(-34.604547, -58.380942))
+                        add(LatLng(-34.604599, -58.382169))
                         fillColor(POLYGON_FILL_COLOR)
                     }
                 ),
                 ZoneClusterItem(
                     id = "zone-2",
-                    title = "Zone 2",
-                    snippet = "This is Zone 2.",
+                    title = "Teatro Colón",
+                    snippet = "Este es el Teatro Colón",
                     polygonOptions = polygonOptions {
-                        add(LatLng(49.110, -122.554))
-                        add(LatLng(49.107, -122.559))
-                        add(LatLng(49.103, -122.551))
-                        add(LatLng(49.112, -122.549))
+                        add(LatLng(-34.600476, -58.385332))
+                        add(LatLng(-34.601538, -58.385233))
+                        add(LatLng(-34.601386, -58.382369))
+                        add(LatLng(-34.600312, -58.382437))
+                        fillColor(POLYGON_FILL_COLOR)
+                    }
+                ),
+                ZoneClusterItem(
+                    id = "zone-3",
+                    title = "Congreso de la Nación Argentina",
+                    snippet = "Este es el Congreso de la Nación Argentina",
+                    polygonOptions = polygonOptions {
+                        add(LatLng(-34.609271, -58.393395))
+                        add(LatLng(-34.609306, -58.391431))
+                        add(LatLng(-34.610208, -58.391300))
+                        add(LatLng(-34.610423, -58.393330))
                         fillColor(POLYGON_FILL_COLOR)
                     }
                 )
