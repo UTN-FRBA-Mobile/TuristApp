@@ -15,7 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.MapViewModel
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.home.HomeScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourScreen
 import com.google.android.gms.location.FusedLocationProviderClient

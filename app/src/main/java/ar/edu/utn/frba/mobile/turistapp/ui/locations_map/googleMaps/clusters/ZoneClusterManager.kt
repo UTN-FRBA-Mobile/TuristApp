@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters
+package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters
 
 import android.content.Context
 import com.google.android.gms.maps.GoogleMap

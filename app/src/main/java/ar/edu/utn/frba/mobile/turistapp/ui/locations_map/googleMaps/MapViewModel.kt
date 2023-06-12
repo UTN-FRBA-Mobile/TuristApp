@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp.ui.googleMaps
+package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -6,10 +6,10 @@ import android.graphics.Color
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters.ZoneClusterItem
-import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters.ZoneClusterManager
-import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters.calculateCameraViewPoints
-import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters.getCenterOfPolygon
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterItem
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterManager
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.calculateCameraViewPoints
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.getCenterOfPolygon
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng

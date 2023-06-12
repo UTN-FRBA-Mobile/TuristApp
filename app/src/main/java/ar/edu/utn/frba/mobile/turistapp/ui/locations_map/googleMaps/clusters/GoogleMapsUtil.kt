@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters
+package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters
 
 /**
  * A set of utility functions for centering the camera given some [LatLng] points.
