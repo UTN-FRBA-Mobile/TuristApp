@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import ar.edu.utn.frba.mobile.turistapp.MapState
+import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.MapState
 import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters.ZoneClusterManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

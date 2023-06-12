@@ -38,8 +38,8 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
-import ar.edu.utn.frba.mobile.turistapp.MapState
-import ar.edu.utn.frba.mobile.turistapp.MapViewModel
+import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.MapState
+import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.MapViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.googleMaps.clusters.ZoneClusterManager
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModel

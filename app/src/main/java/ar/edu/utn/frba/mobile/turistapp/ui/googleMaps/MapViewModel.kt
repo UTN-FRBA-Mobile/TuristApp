@@ -1,4 +1,4 @@
-package ar.edu.utn.frba.mobile.turistapp
+package ar.edu.utn.frba.mobile.turistapp.ui.googleMaps
 
 import android.annotation.SuppressLint
 import android.content.Context
