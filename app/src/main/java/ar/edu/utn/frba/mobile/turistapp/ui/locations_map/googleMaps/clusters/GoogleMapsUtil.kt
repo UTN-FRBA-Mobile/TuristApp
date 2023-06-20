@@ -7,7 +7,7 @@ package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 
-fun List<LatLng>.getCenterOfPolygon(): LatLngBounds {
+fun List<LatLng>.getCenterOfMarkers(): LatLngBounds {
     val centerBuilder: LatLngBounds.Builder = LatLngBounds.builder()
     forEach { centerBuilder.include(LatLng(it.latitude, it.longitude)) }
     return centerBuilder.build()

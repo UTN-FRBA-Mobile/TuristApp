@@ -1,5 +1,4 @@
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,17 +37,14 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapState
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterManager
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModelFactory
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.Title
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.LatLng
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -116,9 +112,7 @@ fun MapDescription(viewModel: MapViewModel, tour: TourResponse, locations: List<
     val screenWidth = configuration.screenWidthDp.dp
 
     BottomSheetScaffold(
-        mapScreen = { GoogleMapScreen(state = viewModel.state.value,
-            setupClusterManager = viewModel::setupClusterManager,
-            calculateZoneViewCenter = viewModel::calculateZoneLatLngBounds) },
+        mapScreen = { GoogleMapScreen(viewModel, locations.map { it -> LatLng(it.latitude, it.longitude) }) },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },
         listContent = { LocationListScreen(tour, locations) }
     )

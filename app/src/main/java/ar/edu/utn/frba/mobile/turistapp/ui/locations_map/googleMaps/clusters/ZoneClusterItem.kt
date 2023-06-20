@@ -14,5 +14,5 @@ data class ZoneClusterItem(
 
     override fun getTitle() = title
 
-    override fun getPosition() = polygonOptions.points.getCenterOfPolygon().center
+    override fun getPosition() = polygonOptions.points.getCenterOfMarkers().center
 }

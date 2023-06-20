@@ -3,14 +3,20 @@ package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.os.Looper
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterItem
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterManager
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.calculateCameraViewPoints
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.getCenterOfPolygon
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.getCenterOfMarkers
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.Granularity
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -24,46 +30,12 @@ class MapViewModel @Inject constructor(): ViewModel() {
     val state: MutableState<MapState> = mutableStateOf(
         MapState(
             lastKnownLocation = null,
-            clusterItems = listOf(
-                ZoneClusterItem(
-                    id = "zone-1",
-                    title = "Obelisco de Buenos Aires",
-                    snippet = "Este es el Obelisco de Buenos Aires",
-                    polygonOptions = polygonOptions {
-                        add(LatLng(-34.602528, -58.382261))
-                        add(LatLng(-34.602580, -58.381061))
-                        add(LatLng(-34.604547, -58.380942))
-                        add(LatLng(-34.604599, -58.382169))
-                        fillColor(POLYGON_FILL_COLOR)
-                    }
-                ),
-                ZoneClusterItem(
-                    id = "zone-2",
-                    title = "Teatro Colón",
-                    snippet = "Este es el Teatro Colón",
-                    polygonOptions = polygonOptions {
-                        add(LatLng(-34.600476, -58.385332))
-                        add(LatLng(-34.601538, -58.385233))
-                        add(LatLng(-34.601386, -58.382369))
-                        add(LatLng(-34.600312, -58.382437))
-                        fillColor(POLYGON_FILL_COLOR)
-                    }
-                ),
-                ZoneClusterItem(
-                    id = "zone-3",
-                    title = "Congreso de la Nación Argentina",
-                    snippet = "Este es el Congreso de la Nación Argentina",
-                    polygonOptions = polygonOptions {
-                        add(LatLng(-34.609271, -58.393395))
-                        add(LatLng(-34.609306, -58.391431))
-                        add(LatLng(-34.610208, -58.391300))
-                        add(LatLng(-34.610423, -58.393330))
-                        fillColor(POLYGON_FILL_COLOR)
-                    }
-                )
-            )
+            currentLocation = null,
+            clusterItems = listOf()
+
         )
     )
+
 
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(
@@ -87,6 +59,32 @@ class MapViewModel @Inject constructor(): ViewModel() {
         }
     }
 
+    val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            for (location in locationResult.locations) {
+                // Update state with new location
+                val newLatLng = LatLng(location.latitude, location.longitude)
+                state.value.currentLocation = newLatLng
+            }
+        }
+    }
+
+    private val locationRequest: LocationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).apply {
+        setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
+        setWaitForAccurateLocation(true)
+    }.build()
+
+    fun startLocationUpdates(
+        fusedLocationProviderClient: FusedLocationProviderClient
+    ) {
+        try {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        } catch (e: SecurityException) {
+            // handle the security exception
+        }
+    }
+
+
     fun setupClusterManager(
         context: Context,
         map: GoogleMap,
@@ -96,11 +94,14 @@ class MapViewModel @Inject constructor(): ViewModel() {
         return clusterManager
     }
 
-    fun calculateZoneLatLngBounds(): LatLngBounds {
+
+/*
+* Recibe como parámetro la lista de coordenadas de las locations de una ruta y devuelve un LatLngBounds que contiene todas las coordenadas.
+* Se utiliza para centrar la pantalla en los puntos de interés de una ruta.
+* */
+    fun calculateZoneLatLngBounds(locationCoordinates: List<LatLng>): LatLngBounds {
         // Get all the points from all the polygons and calculate the camera view that will show them all.
-        val latLngs = state.value.clusterItems.map { it.polygonOptions }
-            .map { it.points.map { LatLng(it.latitude, it.longitude) } }.flatten()
-        return latLngs.calculateCameraViewPoints().getCenterOfPolygon()
+        return locationCoordinates.calculateCameraViewPoints().getCenterOfMarkers()
     }
 
 
