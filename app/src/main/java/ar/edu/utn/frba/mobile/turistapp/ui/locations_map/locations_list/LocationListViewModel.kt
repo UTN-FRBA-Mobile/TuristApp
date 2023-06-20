@@ -23,6 +23,7 @@ class LocationListViewModel(tourId: Int, private val locationApi: LocationAPI = 
 
     val locations = liveData(Dispatchers.IO) {
         emit(null)
+
         emit(locationApi.getTourLocations(tourId))
     }
 }

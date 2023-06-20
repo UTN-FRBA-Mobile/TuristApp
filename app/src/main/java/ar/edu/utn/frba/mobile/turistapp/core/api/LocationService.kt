@@ -5,7 +5,10 @@ import retrofit2.http.GET
 
 interface LocationService {
 
-    @GET("fbffcce0-431c-40e3-985c-80367b488f1b")
-    suspend fun retrieveTourLocations(): List<Location>
+    @GET("81e2a27f-d7e3-4355-a3b8-e31361564e0e")
+    suspend fun retrieveTourLocations_es(): List<Location>
+
+    @GET("f7cb26bd-f7f6-4858-8322-556932255dce")
+    suspend fun retrieveTourLocations_en(): List<Location>
 
 }

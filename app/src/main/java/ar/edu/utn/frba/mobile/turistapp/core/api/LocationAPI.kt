@@ -1,6 +1,8 @@
 package ar.edu.utn.frba.mobile.turistapp.core.api
 
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
+import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
 
 interface LocationAPI {
     suspend fun getTourLocations(id: Int): List<Location>
@@ -9,7 +11,10 @@ interface LocationAPI {
 
 class LocationAPIWithRetrofit : LocationAPI {
     override suspend fun getTourLocations(id: Int): List<Location> {
-        return LocationRetriever.retrofit.retrieveTourLocations()
+        when(LocaleUtils.currentLocale()) {
+            AvailableLanguages.English -> return LocationRetriever.retrofit.retrieveTourLocations_en()
+            AvailableLanguages.Spanish -> return LocationRetriever.retrofit.retrieveTourLocations_es()
+        }
 }
 
     companion object {
@@ -22,8 +27,7 @@ class LocationAPIWithRetrofit : LocationAPI {
             proximityLabel = "Cerca",
             proximityValue = 10,
             latitude = -34.60800822829423,
-            longitude = -58.37026107360327,
-            audioFileName = "audio_test"
+            longitude = -58.37026107360327
         )
 
         fun sampleLocations(): List<Location> {
