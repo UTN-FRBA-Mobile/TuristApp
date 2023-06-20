@@ -5,9 +5,15 @@ import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 import retrofit2.http.GET
 
 interface TourService {
-    @GET("1499a661-7d85-49a7-8342-ee65c2755733")
-    suspend fun retrieveHomeTours(): HomeToursResponse
+    @GET("88dbead1-d07c-4c16-9f50-e20842e6c2a2")
+    suspend fun retrieveHomeTours_es(): HomeToursResponse
 
-    @GET("b27e0ca7-ba49-47dc-92e9-4dbfb4be6db1")
-    suspend fun retrieveTour(): TourResponse
+    @GET("c47b4969-cb11-4f39-8d82-e63382e96814")
+    suspend fun retrieveHomeTours_en(): HomeToursResponse
+
+    @GET("70f51d5c-a207-416e-bd9c-81089aeb1551")
+    suspend fun retrieveTour_es(): TourResponse
+
+    @GET("7637ec50-234d-4813-ad77-b81bc93ab2a8")
+    suspend fun retrieveTour_en(): TourResponse
 }

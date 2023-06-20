@@ -3,6 +3,8 @@ package ar.edu.utn.frba.mobile.turistapp.core.api
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourReview
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
+import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
 
 interface ToursAPI {
     suspend fun getNearbyTours(): List<MinifiedTour>
@@ -12,16 +14,27 @@ interface ToursAPI {
 
 class MockToursAPI: ToursAPI {
     override suspend fun getNearbyTours(): List<MinifiedTour> {
-        return TourRetriever.retrofit.retrieveHomeTours().tours
+        val languaje = LocaleUtils.currentLocale()
+        when(LocaleUtils.currentLocale()) {
+            AvailableLanguages.English -> return TourRetriever.retrofit.retrieveHomeTours_en().tours
+            AvailableLanguages.Spanish -> return TourRetriever.retrofit.retrieveHomeTours_es().tours
+        }
     }
 
     override suspend fun getFavoriteTours(): List<MinifiedTour> {
         // TODO: local favorites
-        return TourRetriever.retrofit.retrieveHomeTours().tours
+        val languaje = LocaleUtils.currentLocale()
+        when(LocaleUtils.currentLocale()) {
+            AvailableLanguages.English -> return TourRetriever.retrofit.retrieveHomeTours_en().tours
+            AvailableLanguages.Spanish -> return TourRetriever.retrofit.retrieveHomeTours_es().tours
+        }
     }
 
     override suspend fun getTour(id: Int): TourResponse {
-        return TourRetriever.retrofit.retrieveTour()
+        when(LocaleUtils.currentLocale()) {
+            AvailableLanguages.English -> return TourRetriever.retrofit.retrieveTour_en()
+            AvailableLanguages.Spanish -> return TourRetriever.retrofit.retrieveTour_es()
+        }
     }
 
     companion object {
