@@ -2,6 +2,7 @@ package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps
 
 import android.annotation.SuppressLint
 import android.os.Looper
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,8 @@ class MapViewModel @Inject constructor(): ViewModel() {
         )
     )
 
+    lateinit var fusedLocationProviderClient:FusedLocationProviderClient;
+
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(
         fusedLocationProviderClient: FusedLocationProviderClient
@@ -50,12 +53,13 @@ class MapViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    val locationCallback = object : LocationCallback() {
+    private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             for (location in locationResult.locations) {
                 // Update state with new location
                 val newLatLng = LatLng(location.latitude, location.longitude)
                 state.value.currentLocation = newLatLng
+                Log.i("ubicacion: ", newLatLng.toString())
             }
         }
     }
@@ -66,13 +70,16 @@ class MapViewModel @Inject constructor(): ViewModel() {
     }.build()
 
     fun startLocationUpdates(
-        fusedLocationProviderClient: FusedLocationProviderClient
     ) {
         try {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } catch (e: SecurityException) {
             // handle the security exception
         }
+    }
+
+    fun stopLocationUpdates() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 /*
 * Recibe como parámetro la lista de coordenadas de las locations de una ruta y devuelve un LatLngBounds que contiene todas las coordenadas.

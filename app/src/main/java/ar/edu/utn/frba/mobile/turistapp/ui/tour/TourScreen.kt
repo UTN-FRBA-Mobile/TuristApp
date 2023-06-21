@@ -44,15 +44,17 @@ import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.turistapp.R
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 import coil.compose.AsyncImage
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TourScreen(tourId: Int, navController: NavController? = null) {
+fun TourScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavController? = null) {
     val viewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val tourState = viewModel.tour.observeAsState()
     val tour = tourState.value
+    mapViewModel.stopLocationUpdates()
     TourScreenView(tour, navController)
 }
 

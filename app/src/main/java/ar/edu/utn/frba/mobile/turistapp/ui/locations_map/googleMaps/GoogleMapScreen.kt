@@ -22,10 +22,9 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun GoogleMapScreen(viewModel: MapViewModel, locations: List<Location>) {
+fun GoogleMapScreen(mapViewModel: MapViewModel, locations: List<Location>) {
     // locations.map { it -> LatLng(it.latitude, it.longitude) }
-
-    val state = viewModel.state.value //TODO: Hacer que el state sea observable
+    val state = mapViewModel.state.value //TODO: Hacer que el state sea observable
     // Set properties using MapProperties which you can use to recompose the map
     val mapProperties = MapProperties(
         // Only enable if user has accepted location permissions.
@@ -54,7 +53,7 @@ fun GoogleMapScreen(viewModel: MapViewModel, locations: List<Location>) {
                                 cameraPositionState.animate(
                                     update = CameraUpdateFactory.newLatLngBounds(
                                         //Centrar la pantalla del mapa en las locations
-                                        viewModel.calculateZoneLatLngBounds(locations.map{LatLng(it.latitude, it.longitude)}),
+                                        mapViewModel.calculateZoneLatLngBounds(locations.map{LatLng(it.latitude, it.longitude)}),
                                         0
                                     ),
                                 )

@@ -46,19 +46,19 @@ import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MapScreen(viewModel: MapViewModel, tourId: Int, navController: NavController? = null) {
+fun MapScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavController? = null) {
     val tourViewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val locationListViewModel: LocationListViewModel = viewModel(factory = LocationListViewModelFactory(tourId = tourId))
     val tourState = tourViewModel.tour.observeAsState()
     val tour = tourState.value
     val locations = locationListViewModel.locations.observeAsState().value
-    MapsScreenView(viewModel, tour, locations, navController)
+    MapsScreenView(mapViewModel, tour, locations, navController)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapsScreenView(viewModel: MapViewModel, tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
+fun MapsScreenView(mapViewModel: MapViewModel, tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -94,7 +94,7 @@ fun MapsScreenView(viewModel: MapViewModel, tour: TourResponse?, locations: List
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             if (tour != null && locations != null) {
-                MapDescription(viewModel, tour, locations)
+                MapDescription(mapViewModel, tour, locations)
             } else {
                 Loading()
             }
@@ -104,10 +104,12 @@ fun MapsScreenView(viewModel: MapViewModel, tour: TourResponse?, locations: List
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapDescription(viewModel: MapViewModel, tour: TourResponse, locations: List<Location>) {
+fun MapDescription(mapViewModel: MapViewModel, tour: TourResponse, locations: List<Location>) {
+
+    mapViewModel.startLocationUpdates()
 
     BottomSheetScaffold(
-        mapScreen = { GoogleMapScreen(viewModel, locations) },
+        mapScreen = { GoogleMapScreen(mapViewModel, locations) },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },
         listContent = { LocationListScreen(tour, locations) }
     )

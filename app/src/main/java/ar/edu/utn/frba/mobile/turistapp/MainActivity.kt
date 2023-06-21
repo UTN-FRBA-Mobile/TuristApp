@@ -52,6 +52,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         askPermissions()
+        viewModel.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         setContent {
             App(viewModel)
         }
@@ -59,7 +60,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun App(viewModel: MapViewModel) {
+private fun App(mapViewModel: MapViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {
@@ -70,7 +71,7 @@ private fun App(viewModel: MapViewModel) {
         ) { backStackEntry ->
             val tourId: Int? = backStackEntry.arguments?.getInt("tourId")
             if (tourId is Int)
-                TourScreen(tourId, navController)
+                TourScreen(mapViewModel, tourId, navController)
         }
         composable(
             route = "map/{tourId}",
@@ -78,7 +79,7 @@ private fun App(viewModel: MapViewModel) {
         ) { backStackEntry ->
             val tourId = backStackEntry.arguments?.getInt("tourId")
             if (tourId is Int)
-                MapScreen(viewModel, tourId, navController)
+                MapScreen(mapViewModel, tourId, navController)
         }
     }
 }
