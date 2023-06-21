@@ -1,14 +1,10 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Color
 import android.os.Looper
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterItem
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterManager
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.calculateCameraViewPoints
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.getCenterOfMarkers
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -17,10 +13,8 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.ktx.model.polygonOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,11 +25,8 @@ class MapViewModel @Inject constructor(): ViewModel() {
         MapState(
             lastKnownLocation = null,
             currentLocation = null,
-            clusterItems = listOf()
-
         )
     )
-
 
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(
@@ -83,18 +74,6 @@ class MapViewModel @Inject constructor(): ViewModel() {
             // handle the security exception
         }
     }
-
-
-    fun setupClusterManager(
-        context: Context,
-        map: GoogleMap,
-    ): ZoneClusterManager {
-        val clusterManager = ZoneClusterManager(context, map)
-        clusterManager.addItems(state.value.clusterItems)
-        return clusterManager
-    }
-
-
 /*
 * Recibe como parámetro la lista de coordenadas de las locations de una ruta y devuelve un LatLngBounds que contiene todas las coordenadas.
 * Se utiliza para centrar la pantalla en los puntos de interés de una ruta.
@@ -104,9 +83,4 @@ class MapViewModel @Inject constructor(): ViewModel() {
         return locationCoordinates.calculateCameraViewPoints().getCenterOfMarkers()
     }
 
-
-
-    companion object {
-        private val POLYGON_FILL_COLOR = Color.parseColor("#ABF44336")
-    }
 }

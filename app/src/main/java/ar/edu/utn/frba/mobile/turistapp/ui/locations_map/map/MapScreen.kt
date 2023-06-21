@@ -24,7 +24,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +43,6 @@ import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.Location
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.Title
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
-import com.google.android.gms.maps.model.LatLng
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -107,12 +105,9 @@ fun MapsScreenView(viewModel: MapViewModel, tour: TourResponse?, locations: List
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapDescription(viewModel: MapViewModel, tour: TourResponse, locations: List<Location>) {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
-    val screenWidth = configuration.screenWidthDp.dp
 
     BottomSheetScaffold(
-        mapScreen = { GoogleMapScreen(viewModel, locations.map { it -> LatLng(it.latitude, it.longitude) }) },
+        mapScreen = { GoogleMapScreen(viewModel, locations) },
         listTitle = { Title(name = stringResource(id = R.string.locations)) },
         listContent = { LocationListScreen(tour, locations) }
     )

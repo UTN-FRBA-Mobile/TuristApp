@@ -1,4 +1,3 @@
-import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -6,22 +5,26 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapState
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.clusters.ZoneClusterManager
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapEffect
 import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberMarkerState
+import com.google.maps.android.ui.IconGenerator
+import com.google.maps.android.ui.SquareTextView
 import kotlinx.coroutines.launch
 
+
 @Composable
-fun GoogleMapScreen(viewModel: MapViewModel, locationCoordinates: List<LatLng>) {
+fun GoogleMapScreen(viewModel: MapViewModel, locations: List<Location>) {
+    // locations.map { it -> LatLng(it.latitude, it.longitude) }
+
     val state = viewModel.state.value //TODO: Hacer que el state sea observable
     // Set properties using MapProperties which you can use to recompose the map
     val mapProperties = MapProperties(
@@ -37,54 +40,47 @@ fun GoogleMapScreen(viewModel: MapViewModel, locationCoordinates: List<LatLng>) 
             properties = mapProperties,
             cameraPositionState = cameraPositionState
         ) {
-            val context = LocalContext.current
             val scope = rememberCoroutineScope()
-            MapEffect(state.clusterItems) { map ->
-
-                    val clusterManager = viewModel.setupClusterManager(context, map)
-                    map.setOnCameraIdleListener(clusterManager)
-                    map.setOnMarkerClickListener(clusterManager)
-                    state.clusterItems.forEach { clusterItem ->
-                        map.addPolygon(clusterItem.polygonOptions)
-                    }
+            for (location in locations) {
+                Marker(
+                    state = rememberMarkerState(position = LatLng(location.latitude, location.longitude)),
+                    title = location.name,
+                    icon = generateMarkerIcon(location.order.toString())
+                )
+            }
+            MapEffect() { map ->
                     map.setOnMapLoadedCallback {
-
                             scope.launch {
                                 cameraPositionState.animate(
                                     update = CameraUpdateFactory.newLatLngBounds(
                                         //Centrar la pantalla del mapa en las locations
-                                        viewModel.calculateZoneLatLngBounds(locationCoordinates),
+                                        viewModel.calculateZoneLatLngBounds(locations.map{LatLng(it.latitude, it.longitude)}),
                                         0
                                     ),
                                 )
-
-
                     }
                 }
             }
         }
     }
-//    // Center camera to include all the Zones.
-//    LaunchedEffect(state.clusterItems) {
-//        if (state.clusterItems.isNotEmpty()) {
-//            cameraPositionState.animate(
-//                update = CameraUpdateFactory.newLatLngBounds(
-//                    calculateZoneViewCenter(),
-//                    0
-//                ),
-//            )
-//        }
-//    }
 }
 
-/**
- * If you want to center on a specific location.
- */
-private suspend fun CameraPositionState.centerOnLocation(
-    location: Location
-) = animate(
-    update = CameraUpdateFactory.newLatLngZoom(
-        LatLng(location.latitude, location.longitude),
-        15f
-    ),
-)
+@Composable
+fun generateMarkerIcon(text: String): BitmapDescriptor {
+    val context = LocalContext.current
+
+    // Use IconGenerator from Google Maps Android API Utils
+    val iconGenerator = IconGenerator(context)
+    iconGenerator.setContentPadding(0, 0, 0, 0)
+
+    // Create a custom view with the desired number
+    val squareTextView = SquareTextView(context)
+    squareTextView.text = text
+
+    // Set the custom view as the content of the IconGenerator
+    iconGenerator.setContentView(squareTextView)
+
+    // Generate a bitmap descriptor from the IconGenerator
+    val bitmap = iconGenerator.makeIcon()
+    return BitmapDescriptorFactory.fromBitmap(bitmap)
+}
