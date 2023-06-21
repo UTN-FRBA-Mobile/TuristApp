@@ -47,21 +47,16 @@ import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.Title
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MapScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavController? = null) {
     val tourViewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
-    val locationListViewModel: LocationListViewModel = viewModel(factory = LocationListViewModelFactory(tourId = tourId))
+    val locationListViewModel: LocationListViewModel =
+        viewModel(factory = LocationListViewModelFactory(tourId = tourId))
     val tourState = tourViewModel.tour.observeAsState()
     val tour = tourState.value
     val locations = locationListViewModel.locations.observeAsState().value
-    MapsScreenView(mapViewModel, tour, locations, navController)
-}
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MapsScreenView(mapViewModel: MapViewModel, tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
     val context = LocalContext.current
     LaunchedEffect(key1 = Unit) {
         mapViewModel.startLocationUpdates(context)
@@ -121,7 +116,6 @@ fun MapsScreenView(mapViewModel: MapViewModel, tour: TourResponse?, locations: L
 }
 
 
-
 @Composable
 fun Loading() {
     Box(
@@ -137,7 +131,11 @@ fun Loading() {
 //Code from official Jecpack Compose documentation page
 @Composable
 @ExperimentalMaterial3Api
-fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composable() () -> Unit, listContent: @Composable() () -> Unit) {
+fun BottomSheetScaffold(
+    mapScreen: @Composable() () -> Unit,
+    listTitle: @Composable() () -> Unit,
+    listContent: @Composable() () -> Unit
+) {
     val scaffoldState = rememberBottomSheetScaffoldState()
 
     BottomSheetScaffold(
@@ -172,7 +170,6 @@ fun BottomSheetScaffold(mapScreen: @Composable() () -> Unit, listTitle: @Composa
 //********************** PREVIEWS **********************//
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
@@ -180,6 +177,11 @@ fun BottomSheetScaffoldPreview() {
     BottomSheetScaffold(
         mapScreen = { Text(text = "Google Maps") },
         listTitle = { Text(text = stringResource(id = R.string.locations)) },
-        listContent = { LocationListScreen(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations()) }
+        listContent = {
+            LocationListScreen(
+                MockToursAPI.sampleTour(),
+                LocationAPIWithRetrofit.sampleLocations()
+            )
+        }
     )
 }
