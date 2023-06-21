@@ -20,10 +20,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,6 +62,17 @@ fun MapScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavControl
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapsScreenView(mapViewModel: MapViewModel, tour: TourResponse?, locations: List<Location>?, navController: NavController? = null) {
+    val context = LocalContext.current
+    LaunchedEffect(key1 = Unit) {
+        mapViewModel.startLocationUpdates(context)
+    }
+
+    DisposableEffect(key1 = mapViewModel) {
+        onDispose {
+            mapViewModel.stopLocationUpdates(context)
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -94,7 +108,11 @@ fun MapsScreenView(mapViewModel: MapViewModel, tour: TourResponse?, locations: L
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             if (tour != null && locations != null) {
-                MapDescription(mapViewModel, tour, locations)
+                BottomSheetScaffold(
+                    mapScreen = { GoogleMapScreen(mapViewModel, locations) },
+                    listTitle = { Title(name = stringResource(id = R.string.locations)) },
+                    listContent = { LocationListScreen(tour, locations) }
+                )
             } else {
                 Loading()
             }
@@ -102,19 +120,6 @@ fun MapsScreenView(mapViewModel: MapViewModel, tour: TourResponse?, locations: L
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MapDescription(mapViewModel: MapViewModel, tour: TourResponse, locations: List<Location>) {
-
-    mapViewModel.startLocationUpdates()
-
-    BottomSheetScaffold(
-        mapScreen = { GoogleMapScreen(mapViewModel, locations) },
-        listTitle = { Title(name = stringResource(id = R.string.locations)) },
-        listContent = { LocationListScreen(tour, locations) }
-    )
-
-}
 
 
 @Composable

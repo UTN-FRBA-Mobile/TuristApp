@@ -1,6 +1,7 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -13,6 +14,7 @@ import com.google.android.gms.location.Granularity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
@@ -29,7 +31,6 @@ class MapViewModel @Inject constructor(): ViewModel() {
         )
     )
 
-    lateinit var fusedLocationProviderClient:FusedLocationProviderClient;
 
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(
@@ -69,8 +70,8 @@ class MapViewModel @Inject constructor(): ViewModel() {
         setWaitForAccurateLocation(true)
     }.build()
 
-    fun startLocationUpdates(
-    ) {
+    fun startLocationUpdates(context: Context) {
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
         try {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         } catch (e: SecurityException) {
@@ -78,8 +79,13 @@ class MapViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    fun stopLocationUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+   fun stopLocationUpdates(context: Context) {
+       val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+       try {
+              fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+         } catch (e: SecurityException) {
+              // handle the security exception
+       }
     }
 /*
 * Recibe como parámetro la lista de coordenadas de las locations de una ruta y devuelve un LatLngBounds que contiene todas las coordenadas.

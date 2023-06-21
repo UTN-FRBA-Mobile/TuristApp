@@ -27,12 +27,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,11 +52,10 @@ import coil.compose.AsyncImage
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TourScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavController? = null) {
+fun TourScreen(tourId: Int, navController: NavController? = null) {
     val viewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val tourState = viewModel.tour.observeAsState()
     val tour = tourState.value
-    mapViewModel.stopLocationUpdates()
     TourScreenView(tour, navController)
 }
 
