@@ -23,7 +23,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun GoogleMapScreen(mapViewModel: MapViewModel, locations: List<Location>) {
-    // locations.map { it -> LatLng(it.latitude, it.longitude) }
+    mapViewModel.locationsList.clear()
+    mapViewModel.locationsList.addAll(locations)
+    //    mapViewModel.locationsList.addAll(locations.map { LatLng(it.latitude, it.longitude) })
     val state = mapViewModel.state.value //TODO: Hacer que el state sea observable
     // Set properties using MapProperties which you can use to recompose the map
     val mapProperties = MapProperties(

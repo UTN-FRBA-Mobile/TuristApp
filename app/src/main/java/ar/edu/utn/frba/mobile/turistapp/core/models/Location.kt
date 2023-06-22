@@ -5,7 +5,7 @@ data class Location (
     val name: String,
     val description: String,
     val proximityLabel: String,
-    val proximityValue: Int,
+    var proximityValue: Int,
     val latitude: Double,
     val longitude: Double
     )
