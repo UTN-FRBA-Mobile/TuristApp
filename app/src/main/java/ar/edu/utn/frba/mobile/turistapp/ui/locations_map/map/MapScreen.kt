@@ -35,10 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.turistapp.R
-import ar.edu.utn.frba.mobile.turistapp.core.api.LocationAPIWithRetrofit
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
-import ar.edu.utn.frba.mobile.turistapp.core.models.Location
-import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListViewModel
@@ -106,7 +103,7 @@ fun MapScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavControl
                 BottomSheetScaffold(
                     mapScreen = { GoogleMapScreen(mapViewModel, locations) },
                     listTitle = { Title(name = stringResource(id = R.string.locations)) },
-                    listContent = { LocationListScreen(tour, locations) }
+                    listContent = { LocationListScreen(tour, mapViewModel) }
                 )
             } else {
                 Loading()
@@ -180,7 +177,7 @@ fun BottomSheetScaffoldPreview() {
         listContent = {
             LocationListScreen(
                 MockToursAPI.sampleTour(),
-                LocationAPIWithRetrofit.sampleLocations()
+                MapViewModel()
             )
         }
     )

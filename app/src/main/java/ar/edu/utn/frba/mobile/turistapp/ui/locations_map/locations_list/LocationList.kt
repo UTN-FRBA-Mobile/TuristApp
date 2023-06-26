@@ -39,30 +39,31 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 
 
 @Composable
 
-fun LocationListScreen(tour: TourResponse, locations: List<Location>) {
+fun LocationListScreen(tour: TourResponse, viewModel: MapViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        LocationList(tour, locations)
+        LocationList(tour, viewModel)
     }
 }
 
 @Composable
-fun LocationList(tour: TourResponse, locations: List<Location>) {
+fun LocationList(tour: TourResponse, viewModel: MapViewModel) {
     LazyColumn(
         modifier = Modifier
             .padding(8.dp)
     ) {
-        items(locations) { location ->
+        items(items = viewModel.locationsList, itemContent = { location ->
             LocationCard(tour, location)
             Spacer(modifier = Modifier.height(8.dp))
-        }
+        })
     }
 }
 
@@ -172,7 +173,7 @@ private fun LocationCardPreview() {
 @Composable
 @Preview
 fun LocationListPreview() {
-    LocationList(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocations())
+    LocationList(MockToursAPI.sampleTour(), MapViewModel())
 }
 
 
