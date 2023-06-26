@@ -1,10 +1,14 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.tour
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.api.ToursAPI
+import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
+import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
+import ar.edu.utn.frba.mobile.turistapp.core.repository.FavoritesRepository
 import kotlinx.coroutines.Dispatchers
 
 class TourViewModelFactory(private val tourId: Int): ViewModelProvider.Factory {
@@ -21,5 +25,24 @@ class TourViewModel(private val tourId: Int, private val toursAPI: ToursAPI = Mo
     var tour = liveData(Dispatchers.IO) {
         emit(null)
         emit(toursAPI.getTour(tourId))
+    }
+
+    fun isFavorite(): Boolean {
+        return FavoritesRepository().isFavorite(tourId)
+    }
+
+    fun didTapHeart() {
+        val t = tour.value?.let {
+            val minifiedTour = MinifiedTour(
+                id = it.id,
+                title = it.title,
+                description = it.description,
+                languages = it.languages,
+                distance = 0.0,
+                image = it.image
+            )
+            FavoritesRepository().toggleFavorite(tour = minifiedTour)
+            tour = tour
+        }
     }
 }

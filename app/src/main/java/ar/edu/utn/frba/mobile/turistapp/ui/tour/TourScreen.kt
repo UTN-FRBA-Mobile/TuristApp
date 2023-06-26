@@ -56,13 +56,13 @@ fun TourScreen(tourId: Int, navController: NavController? = null) {
     val viewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val tourState = viewModel.tour.observeAsState()
     val tour = tourState.value
-    TourScreenView(tour, navController)
+    TourScreenView(tour, viewModel, navController)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TourScreenView(tour: TourResponse?, navController: NavController? = null) {
+fun TourScreenView(tour: TourResponse?, viewModel: TourViewModel? = null, navController: NavController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,6 +78,19 @@ fun TourScreenView(tour: TourResponse?, navController: NavController? = null) {
                                 contentDescription = "Back"
                             )
                         }
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { viewModel?.didTapHeart() }) {
+                        var heartIcon = R.drawable.ic_heart
+                        if (viewModel != null && viewModel.isFavorite()) {
+                            heartIcon = R.drawable.ic_heart_filled
+                        }
+                        Icon(
+                            painter = painterResource(heartIcon),
+                            contentDescription = null,
+                            modifier = Modifier.height(24.dp)
+                        )
                     }
                 }
             )

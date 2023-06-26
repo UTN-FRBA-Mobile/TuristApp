@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import ar.edu.utn.frba.mobile.turistapp.core.repository.FavoritesRepository
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.home.HomeScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourScreen
@@ -55,6 +56,8 @@ class MainActivity : ComponentActivity() {
             setContent {
             App(viewModel)
         }
+        val sharedPref = getSharedPreferences("myPref", MODE_PRIVATE)
+        FavoritesRepository.sharedPreference = sharedPref
     }
 }
 
