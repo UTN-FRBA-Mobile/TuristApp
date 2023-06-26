@@ -28,7 +28,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,13 +59,16 @@ fun TourScreen(tourId: Int, navController: NavController? = null) {
     val viewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val tourState = viewModel.tour.observeAsState()
     val tour = tourState.value
-    TourScreenView(tour, viewModel, navController)
+    val isFavorite = remember {
+        mutableStateOf(viewModel.isFavorite())
+    }
+    TourScreenView(tour, viewModel, isFavorite, navController)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TourScreenView(tour: TourResponse?, viewModel: TourViewModel? = null, navController: NavController? = null) {
+fun TourScreenView(tour: TourResponse?, viewModel: TourViewModel? = null, isFavorite: MutableState<Boolean> = mutableStateOf(false), navController: NavController? = null) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -81,9 +87,12 @@ fun TourScreenView(tour: TourResponse?, viewModel: TourViewModel? = null, navCon
                     }
                 },
                 actions = {
-                    IconButton(onClick = { viewModel?.didTapHeart() }) {
+                    IconButton(onClick = {
+                        viewModel?.didTapHeart()
+                        isFavorite.value = !isFavorite.value
+                    }) {
                         var heartIcon = R.drawable.ic_heart
-                        if (viewModel != null && viewModel.isFavorite()) {
+                        if (isFavorite.value) {
                             heartIcon = R.drawable.ic_heart_filled
                         }
                         Icon(

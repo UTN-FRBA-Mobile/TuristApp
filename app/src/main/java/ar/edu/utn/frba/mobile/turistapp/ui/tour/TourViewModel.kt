@@ -42,7 +42,6 @@ class TourViewModel(private val tourId: Int, private val toursAPI: ToursAPI = Mo
                 image = it.image
             )
             FavoritesRepository().toggleFavorite(tour = minifiedTour)
-            tour = tour
         }
     }
 }
