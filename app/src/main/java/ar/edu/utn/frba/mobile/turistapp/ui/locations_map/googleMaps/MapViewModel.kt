@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Looper
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
@@ -33,7 +34,7 @@ class MapViewModel @Inject constructor() : ViewModel() {
         )
     )
     val distances = mutableListOf<Int>()
-    val locationsList = mutableListOf<Location>()
+    val locationsList = mutableStateListOf<Location>()
 
     @SuppressLint("MissingPermission")
     fun getDeviceLocation(
@@ -64,17 +65,19 @@ class MapViewModel @Inject constructor() : ViewModel() {
                 // Update state with new location
                 val newLatLng = LatLng(location.latitude, location.longitude)
                 state.value.currentLocation = newLatLng
-                for(loc in locationsList){
-                    val distance = newLatLng?.let { actualLocation ->
+
+                for (index in 0 until locationsList.count()) {
+                    val distance = newLatLng.let { actualLocation ->
                         calculateDistance(
                             actualLocation,
-                            loc.latitude,
-                            loc.longitude
+                            locationsList[index].latitude,
+                            locationsList[index].longitude
                         )
-                    } ?: 0.0 // Valor predeterminado si currentLocation es null
-                    loc.proximityValue = distance.toInt()
+                    }
+                    locationsList[index] = locationsList[index].copy(proximityValue = distance.toInt())
                     distances.add(distance.toInt())
                 }
+
                 val distancesAsString = distances.joinToString()
                 Log.i("Distancias", distancesAsString)
                 Log.i("ubicacion: ", newLatLng.toString())
