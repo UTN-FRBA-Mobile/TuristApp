@@ -3,6 +3,7 @@ package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,7 +50,7 @@ fun LocationListScreen(tour: TourResponse, viewModel: MapViewModel) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 10.dp, vertical = 4.dp)
     ) {
         LocationList(tour, viewModel)
     }
@@ -58,11 +60,11 @@ fun LocationListScreen(tour: TourResponse, viewModel: MapViewModel) {
 fun LocationList(tour: TourResponse, viewModel: MapViewModel) {
     LazyColumn(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(horizontal = 0.dp, vertical = 8.dp)
     ) {
         items(items = viewModel.locationsList, itemContent = { location ->
             LocationCard(tour, location)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
         })
     }
 }
@@ -82,21 +84,29 @@ fun LocationCard(tour: TourResponse, location: Location) {
         Column(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(8.dp)
+                .padding(horizontal = 8.dp, vertical = 0.dp)
         ) {
             Row(
-                modifier = Modifier.padding(vertical = 10.dp),
+                modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = location.order.toString(), style = MaterialTheme.typography.titleMedium)
-                Text(text = location.name, style = MaterialTheme.typography.titleMedium)
-                Chip(text = location.proximityLabel)
+                Column {
+                    Row {
+                        Text(text = location.order.toString() + ".", style = MaterialTheme.typography.titleMedium)
+                        Text(text = location.name, style = MaterialTheme.typography.titleMedium)
+                    }
+                    Row {
+                        Text(
+                            text = location.proximityValue.toString() + " m",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Chip(text = location.proximityLabel)
+                    }
+                }
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = location.proximityValue.toString() + "m",
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                AudioButton(tour, location)
+                Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.Center, modifier = Modifier.width(40.dp)) {
+                    AudioButton(tour, location)
+                }
             }
             // If the card is expanded, show the description
             if (isExpanded.value) {
