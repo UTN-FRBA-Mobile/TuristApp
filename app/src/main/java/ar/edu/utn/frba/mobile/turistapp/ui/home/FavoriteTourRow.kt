@@ -16,21 +16,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
-import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import coil.compose.AsyncImage
+import androidx.compose.ui.tooling.preview.Preview
+import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 
 @Preview(showBackground = true)
 @Composable
-fun TourRowPreview() {
-    TourRow(MockToursAPI.sampleTours().first())
+fun FavoriteTourRowPreview() {
+    FavoriteTourRow(MockToursAPI.sampleTours().first())
 }
 
 @Composable
-fun TourRow(tour: MinifiedTour, navController: NavController? = null) {
+fun FavoriteTourRow(tour: MinifiedTour, navController: NavController? = null) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(10.dp)
@@ -64,11 +64,8 @@ fun TourRow(tour: MinifiedTour, navController: NavController? = null) {
                         fontWeight = FontWeight.Bold
                     )
                 )
-                Text(text = tour.description)
-                Text(text = tour.distance.toString() + " km")
                 Text(text = tour.languages.joinToString(" | "))
             }
         }
     }
 }
-

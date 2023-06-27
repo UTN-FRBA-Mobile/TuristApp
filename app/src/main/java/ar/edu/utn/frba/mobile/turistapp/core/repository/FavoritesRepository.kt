@@ -2,6 +2,7 @@ package ar.edu.utn.frba.mobile.turistapp.core.repository
 
 import android.content.SharedPreferences
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
+import ar.edu.utn.frba.mobile.turistapp.ui.home.FavoritesObserver
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 
@@ -9,6 +10,9 @@ class FavoritesRepository {
     companion object {
         @JvmStatic
         var sharedPreference: SharedPreferences? = null
+
+        @JvmStatic
+        var observers: MutableList<FavoritesObserver> = arrayListOf()
     }
 
     val favoritesKey = "favorites"
@@ -58,5 +62,6 @@ class FavoritesRepository {
         } else {
             recordFavorite(tour)
         }
+        observers.forEach { it.didUpdateFavorites() }
     }
 }

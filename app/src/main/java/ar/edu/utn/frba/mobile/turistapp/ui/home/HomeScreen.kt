@@ -194,7 +194,7 @@ fun Tours(nearbyTours: List<MinifiedTour>, favoriteTours: List<MinifiedTour>, na
             )
         }
         favoriteTours.forEach { tour ->
-            item { TourRow(tour, navController) }
+            item { FavoriteTourRow(tour, navController) }
         }
     }
 }

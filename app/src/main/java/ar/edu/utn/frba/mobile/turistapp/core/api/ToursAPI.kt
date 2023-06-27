@@ -8,21 +8,11 @@ import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
 
 interface ToursAPI {
     suspend fun getNearbyTours(): List<MinifiedTour>
-    suspend fun getFavoriteTours(): List<MinifiedTour>
     suspend fun getTour(id: Int): TourResponse
 }
 
 class MockToursAPI: ToursAPI {
     override suspend fun getNearbyTours(): List<MinifiedTour> {
-        val languaje = LocaleUtils.currentLocale()
-        when(LocaleUtils.currentLocale()) {
-            AvailableLanguages.English -> return TourRetriever.retrofit.retrieveHomeTours_en().tours
-            AvailableLanguages.Spanish -> return TourRetriever.retrofit.retrieveHomeTours_es().tours
-        }
-    }
-
-    override suspend fun getFavoriteTours(): List<MinifiedTour> {
-        // TODO: local favorites
         val languaje = LocaleUtils.currentLocale()
         when(LocaleUtils.currentLocale()) {
             AvailableLanguages.English -> return TourRetriever.retrofit.retrieveHomeTours_en().tours
