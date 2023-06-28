@@ -1,0 +1,32 @@
+{
+  "id": 2,
+  "title": "Centro histórico de Buenos Aires",
+  "description": "Visitaremos los sitios históricos más renombrados del centro de la Ciudad de Buenos Aires!",
+  "rating": 4,
+  "ratingCount": 435,
+  "duration": 4,
+  "languages": [
+    "Inglés",
+    "Español"
+  ],
+  "locations": [
+    "Teatro Colón",
+    "Casa Rosada",
+    "Café Tortoni"
+  ],
+  "image": "https://media.staticontent.com/media/pictures/11699700-cd97-4f9e-b5cb-828c5092efdf",
+  "reviews": [
+    {
+      "stars": 5,
+      "text": "Volvería mil veces!"
+    },
+    {
+      "stars": 4,
+      "text": "Hermosa ciudad"
+    },
+    {
+      "stars": 5,
+      "text": "El mejor tour!"
+    }
+  ]
+}

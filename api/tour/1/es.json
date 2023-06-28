@@ -1,0 +1,34 @@
+{
+  "id": 1,
+  "title": "Centro de la ciudad de Buenos Aires",
+  "description": "Comenzaremos el recorrido en el Congreso Nacional y luego caminaremos por el reconocido boulevard de la Avenida de Mayo con sus magníficos edificios.",
+  "rating": 4,
+  "ratingCount": 648,
+  "duration": 3,
+  "languages": [
+    "Inglés",
+    "Español"
+  ],
+  "locations": [
+    "Obelisco",
+    "National Congress",
+    "Casa Rosada",
+    "Teatro Colón",
+    "Café Tortoni"
+  ],
+  "image": "https://el-pais.brightspotcdn.com/dims4/default/bef130e/2147483647/strip/true/crop/930x639+0+22/resize/1440x990!/quality/90/?url=https%3A%2F%2Fel-pais-uruguay-production-web.s3.amazonaws.com%2Fbrightspot%2Fuploads%2F2022%2F08%2F12%2F62f6ac43c99e6.jpeg",
+  "reviews": [
+    {
+      "stars": 4,
+      "text": "Encantadora ciudad <3"
+    },
+    {
+      "stars": 5,
+      "text": "Genial tour!"
+    },
+    {
+      "stars": 5,
+      "text": "Excelente"
+    }
+  ]
+}

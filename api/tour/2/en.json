@@ -1,0 +1,32 @@
+{
+  "id": 2,
+  "title": "Centro histórico de Buenos Aires",
+  "description": "We will visit the most renowned historical sites in the center of the City of Buenos Aires!\n\n",
+  "rating": 3,
+  "ratingCount": 435,
+  "duration": 4,
+  "languages": [
+    "English",
+    "Spanish"
+  ],
+  "locations": [
+    "Colon Theater",
+    "Pink House",
+    "Tortoni Cafe"
+  ],
+  "image": "https://media.staticontent.com/media/pictures/11699700-cd97-4f9e-b5cb-828c5092efdf",
+  "reviews": [
+    {
+      "stars": 5,
+      "text": "Amazing!!!"
+    },
+    {
+      "stars": 5,
+      "text": "Great city"
+    },
+    {
+      "stars": 5,
+      "text": "Wonderful"
+    }
+  ]
+}
