@@ -1,14 +1,13 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.tour
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.api.ToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
-import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 import ar.edu.utn.frba.mobile.turistapp.core.repository.FavoritesRepository
+import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
 import kotlinx.coroutines.Dispatchers
 
 class TourViewModelFactory(private val tourId: Int): ViewModelProvider.Factory {
@@ -32,11 +31,11 @@ class TourViewModel(private val tourId: Int, private val toursAPI: ToursAPI = Mo
     }
 
     fun didTapHeart() {
-        val t = tour.value?.let {
+        tour.value?.let {
             val minifiedTour = MinifiedTour(
                 id = it.id,
                 title = it.title,
-                description = it.description,
+                description = setOf( listOf(LocaleUtils.currentLocaleCode(), it.description) ),
                 languages = it.languages,
                 distance = 0.0,
                 image = it.image

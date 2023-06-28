@@ -3,7 +3,6 @@ package ar.edu.utn.frba.mobile.turistapp.core.api
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourReview
-import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
 import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
 
 interface ToursAPI {
@@ -13,18 +12,11 @@ interface ToursAPI {
 
 class MockToursAPI: ToursAPI {
     override suspend fun getNearbyTours(): List<MinifiedTour> {
-        val languaje = LocaleUtils.currentLocale()
-        when(LocaleUtils.currentLocale()) {
-            AvailableLanguages.English -> return TourRetriever.retrofit.retrieveHomeTours_en().tours
-            AvailableLanguages.Spanish -> return TourRetriever.retrofit.retrieveHomeTours_es().tours
-        }
+        return TourRetriever.retrofit.retrieveHomeTours().tours
     }
 
     override suspend fun getTour(id: Int): TourResponse {
-        when(LocaleUtils.currentLocale()) {
-            AvailableLanguages.English -> return TourRetriever.retrofit.retrieveTour_en()
-            AvailableLanguages.Spanish -> return TourRetriever.retrofit.retrieveTour_es()
-        }
+        return TourRetriever.retrofit.retrieveTour(id.toString(), LocaleUtils.currentLocaleCode())
     }
 
     companion object {
@@ -33,7 +25,9 @@ class MockToursAPI: ToursAPI {
                 MinifiedTour(
                     1,
                     "Buenos Aires City Center",
-                    "Obelisco, Puerto Madero, La Boca",
+                    setOf(
+                        listOf("en", "Obelisco, Puerto Madero, La Boca")
+                    ),
                     setOf("English", "Spanish"),
                     2.0,
                     "http://image.url/test.jpg"
@@ -41,7 +35,9 @@ class MockToursAPI: ToursAPI {
                 MinifiedTour(
                     2,
                     "Buenos Aires City Center 2",
-                    "Casa Rosada, Obelisco, Teatro Colón",
+                    setOf(
+                        listOf("Casa Rosada, Obelisco, Teatro Colón"),
+                    ),
                     setOf("Spanish"),
                     1.2,
                     "http://image.url/test.jpg"

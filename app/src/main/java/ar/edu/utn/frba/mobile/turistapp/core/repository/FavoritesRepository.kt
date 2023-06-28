@@ -5,6 +5,7 @@ import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.ui.home.FavoritesObserver
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import java.lang.Exception
 
 class FavoritesRepository {
     companion object {
@@ -17,39 +18,43 @@ class FavoritesRepository {
 
     val favoritesKey = "favorites"
 
+    private fun persistFavorites(favorites: List<MinifiedTour>) {
+        val editor = sharedPreference?.edit()
+        val json = Gson().toJson(favorites)
+        editor?.putString(favoritesKey, json)
+        editor?.apply()
+    }
+
     fun recordFavorite(tour: MinifiedTour) {
         if (sharedPreference == null) { return }
-
-        var favoritesList = getFavorites().filter { it.id != tour.id }.toMutableList()
+        val favoritesList = getFavorites().filter { it.id != tour.id }.toMutableList()
         favoritesList.add(tour)
-        var editor = sharedPreference?.edit()
-        val gson = Gson()
-        val json = gson.toJson(favoritesList.toList())
-        editor?.putString(favoritesKey, json)
-        editor?.commit()
+        persistFavorites(favoritesList)
     }
 
     fun removeFavorite(tour: MinifiedTour) {
         if (sharedPreference == null) { return }
-
-        var favoritesList = getFavorites().filter { it.id != tour.id }.toMutableList()
-        var editor = sharedPreference?.edit()
-        val gson = Gson()
-        val json = gson.toJson(favoritesList.toList())
-        editor?.putString(favoritesKey, json)
-        editor?.commit()
+        val favoritesList = getFavorites().filter { it.id != tour.id }.toMutableList()
+        persistFavorites(favoritesList)
     }
 
     fun getFavorites(): List<MinifiedTour> {
-        if (sharedPreference != null) {
-            var json: String? = sharedPreference?.getString(favoritesKey, "")
-            if (json != null && json.isNotEmpty()) {
-                val obj: List<MinifiedTour> =
-                    GsonBuilder().create().fromJson(json, Array<MinifiedTour>::class.java).toList()
-                return obj
+        try {
+            if (sharedPreference != null) {
+                val json: String? = sharedPreference?.getString(favoritesKey, "")
+                if (json != null && json.isNotEmpty()) {
+                    val obj: List<MinifiedTour> =
+                        GsonBuilder().create().fromJson(json, Array<MinifiedTour>::class.java).toList()
+                    return obj
+                }
             }
         }
-        return emptyList<MinifiedTour>()
+        catch (e: Exception) {
+            val favoritesList = emptyList<MinifiedTour>()
+            persistFavorites(favoritesList)
+            return favoritesList
+        }
+        return emptyList()
     }
 
     fun isFavorite(id: Int): Boolean {
