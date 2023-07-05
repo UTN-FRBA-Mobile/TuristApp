@@ -87,7 +87,9 @@ fun LocationCard(tour: TourResponse, location: Location) {
                 .padding(horizontal = 8.dp, vertical = 0.dp)
         ) {
             Row(
-                modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
@@ -100,7 +102,9 @@ fun LocationCard(tour: TourResponse, location: Location) {
                             text = location.proximityValue.toString() + " m",
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        Chip(text = location.proximityLabel)
+                        if(isCloseToLocation(location.proximityValue)){
+                        Chip(text = "ahora cerca")
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -172,6 +176,8 @@ fun Chip(
         )
     }
 }
+
+private fun isCloseToLocation(proximityValue:Int):Boolean = proximityValue < 100
 
 //********************** PREVIEWS **********************//
 @Composable
