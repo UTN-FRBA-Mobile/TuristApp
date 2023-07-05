@@ -129,19 +129,30 @@ fun AudioButton(tour: TourResponse, location: Location) {
     val audioPlayer = AudioPlayer()
     val isPlaying by audioPlayer.isPlaying.collectAsState()
     val playIcon = painterResource(R.drawable.ic_play_circle_green)
+    val playIconDisabled = painterResource(R.drawable.ic_play_circle_disabled)
     val pauseIcon = painterResource(R.drawable.ic_pause)
 
     IconButton(
         onClick = {
             if (isPlaying) audioPlayer.pause()
             else
-                audioPlayer.play(tour, location)
+                if(isCloseToLocation(location.proximityValue)) {
+                    audioPlayer.play(tour, location)
+                }
         }
     ) {
         Icon(
-            painter = if (isPlaying) pauseIcon else playIcon,
+            painter = if (isPlaying) pauseIcon
+            else if(isCloseToLocation(location.proximityValue)){
+                playIcon
+                }
+            else playIconDisabled,
             contentDescription = if (isPlaying) stringResource(id = R.string.pause_audio)
-                                    else stringResource(id = R.string.play_audio),
+                                    else if(isCloseToLocation(location.proximityValue)){
+                                             stringResource(id = R.string.play_audio)
+                                        }
+                                        else stringResource(id = R.string.play_audio_disabled)
+            ,
             tint = Color.Unspecified,
             modifier = Modifier.size(30.dp)
         )

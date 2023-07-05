@@ -16,6 +16,7 @@
     <string name="reviews">Reviews</string>
 
     <string name="play_audio">Play audio</string>
+    <string name="play_audio_disabled">Play audio disabled</string>
     <string name="pause_audio">Pause audio</string>
     <string name="stop_audio">Stop audio</string>
     <string name="show_tour_locations">Show tour locations</string>

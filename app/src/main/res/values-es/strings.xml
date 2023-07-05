@@ -16,6 +16,7 @@
     <string name="reviews">Comentarios</string>
 
     <string name="play_audio">Reproducir audio</string>
+    <string name="play_audio_disabled">Play audio disabled</string>
     <string name="pause_audio">Pausar audio</string>
     <string name="stop_audio">Detener audio</string>
     <string name="show_tour_locations">Mostrar ubicaciones</string>
