@@ -8,4 +8,6 @@ data class Location (
     var proximityValue: Int,
     val latitude: Double,
     val longitude: Double
-    )
+) {
+    fun isNear(): Boolean = true //proximityValue < 100
+}

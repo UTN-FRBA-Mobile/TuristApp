@@ -1,3 +1,6 @@
+package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.map
+
+import GoogleMapScreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -23,6 +26,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.turistapp.R
 import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
 import ar.edu.utn.frba.mobile.turistapp.ui.audio_bar.AudioBar
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list.LocationListScreen
@@ -48,7 +53,7 @@ import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourViewModelFactory
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MapScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavController? = null) {
+fun MapScreen(mapViewModel: MapViewModel, audioPlayer: AudioPlayer, tourId: Int, navController: NavController? = null) {
     val tourViewModel: TourViewModel = viewModel(factory = TourViewModelFactory(tourId = tourId))
     val locationListViewModel: LocationListViewModel =
         viewModel(factory = LocationListViewModelFactory(tourId = tourId))
@@ -56,6 +61,8 @@ fun MapScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavControl
     val tour = tourState.value
     val locations = locationListViewModel.locations.observeAsState().value
     val context = LocalContext.current
+    val playingData = audioPlayer.playingData.collectAsState().value
+
     LaunchedEffect(key1 = Unit) {
         mapViewModel.startLocationUpdates(context)
     }
@@ -106,14 +113,10 @@ fun MapScreen(mapViewModel: MapViewModel, tourId: Int, navController: NavControl
                     BottomSheetScaffold(
                         mapScreen = { GoogleMapScreen(mapViewModel, locations) },
                         listTitle = { Title(name = stringResource(id = R.string.locations)) },
-                        listContent = { LocationListScreen(tour, mapViewModel) }
+                        listContent = { LocationListScreen(tour, mapViewModel, audioPlayer) }
                     ) }
-                    AudioBar(
-                        progress = 0.1f, // Valor de ejemplo para la barra de progreso (0.0f a 1.0f)
-                        isPlaying = false, // Valor de ejemplo para el estado de reproducción
-                        onPlayStopClick = { /* Lógica para alternar la reproducción/parada */ },
-                        locations = { LocationListScreen(tour, mapViewModel) }
-                    )
+                    if (playingData.isActive())
+                        AudioBar(audioPlayer)
                 }
             } else {
                 Loading()
@@ -186,7 +189,8 @@ fun BottomSheetScaffoldPreview() {
         listContent = {
             LocationListScreen(
                 MockToursAPI.sampleTour(),
-                MapViewModel()
+                MapViewModel(),
+                AudioPlayer()
             )
         }
     )

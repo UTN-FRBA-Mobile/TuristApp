@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,10 +24,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.utn.frba.mobile.turistapp.R
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun AudioBar(progress: Float, isPlaying: Boolean, onPlayStopClick: () -> Unit,  locations: @Composable () -> Unit) {
-    val playbackProgress = remember { mutableStateOf(0.0f) }
+fun AudioBar(audioPlayer: AudioPlayer) {
+    val playingData = audioPlayer.playingData.collectAsState().value
+    var currentPosition = remember { mutableStateOf(0F) }.value
+
+    if (playingData.playing) {
+        LaunchedEffect(Unit) {
+            while(true) {
+                currentPosition = audioPlayer.currentPosition()
+                delay(1.seconds / 30)
+            }
+        }
+    } else {
+        currentPosition = audioPlayer.currentPosition()
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,22 +53,16 @@ fun AudioBar(progress: Float, isPlaying: Boolean, onPlayStopClick: () -> Unit,  
         verticalAlignment = Alignment.CenterVertically
     ) {
         Button(
-            onClick = { onPlayStopClick() },
+            onClick = { audioPlayer.alternate() },
             modifier = Modifier.padding(start = 16.dp)
         ) {
             val playIcon = painterResource(R.drawable.ic_play_circle_green)
-            val playIconDisabled = painterResource(R.drawable.ic_play_circle_disabled)
             val pauseIcon = painterResource(R.drawable.ic_pause)
-            Icon(painter = if (isPlaying) pauseIcon
-            else if(isCloseToLocation(99)){
-                playIcon
-            } else playIconDisabled,
-                contentDescription = if (isPlaying) stringResource(id = R.string.pause_audio)
-                else if(isCloseToLocation(99)){
-                    stringResource(id = R.string.play_audio)
-                } else stringResource(id = R.string.play_audio_disabled),
+            Icon(painter = if (playingData.playing) pauseIcon else playIcon,
+                contentDescription = stringResource(id = if (playingData.playing) R.string.pause_audio else R.string.play_audio),
                 tint = Color.Unspecified,
-                modifier = Modifier.size(30.dp))
+                modifier = Modifier.size(30.dp)
+            )
         }
 
         Spacer(
@@ -75,21 +85,14 @@ fun AudioBar(progress: Float, isPlaying: Boolean, onPlayStopClick: () -> Unit,  
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.White)
-                    .width((progress * 100).dp)
+                    .fillMaxWidth(currentPosition)
             )
         }
     }
 }
 
-private fun isCloseToLocation(proximityValue: Int): Boolean = proximityValue < 100
-
 @Composable
 @Preview(showBackground = true)
 fun BottomAudioPlayerRowPreview() {
-    AudioBar(
-        progress = 0.7f, // Valor de ejemplo para la barra de progreso (0.0f a 1.0f)
-        isPlaying = true, // Valor de ejemplo para el estado de reproducción
-        onPlayStopClick = { /* Lógica para alternar la reproducción/parada */ },
-        locations = { Text(text = "Google Maps") }
-    )
+    AudioBar(AudioPlayer())
 }

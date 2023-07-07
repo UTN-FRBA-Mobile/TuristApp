@@ -25,7 +25,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,31 +45,31 @@ import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 
 @Composable
 
-fun LocationListScreen(tour: TourResponse, viewModel: MapViewModel) {
+fun LocationListScreen(tour: TourResponse, viewModel: MapViewModel, audioPlayer: AudioPlayer) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 10.dp, vertical = 4.dp)
     ) {
-        LocationList(tour, viewModel)
+        LocationList(tour, viewModel, audioPlayer)
     }
 }
 
 @Composable
-fun LocationList(tour: TourResponse, viewModel: MapViewModel) {
+fun LocationList(tour: TourResponse, viewModel: MapViewModel, audioPlayer: AudioPlayer) {
     LazyColumn(
         modifier = Modifier
             .padding(horizontal = 0.dp, vertical = 8.dp)
     ) {
         items(items = viewModel.locationsList, itemContent = { location ->
-            LocationCard(tour, location)
+            LocationCard(tour, location, audioPlayer)
             Spacer(modifier = Modifier.height(12.dp))
         })
     }
 }
 
 @Composable
-fun LocationCard(tour: TourResponse, location: Location) {
+fun LocationCard(tour: TourResponse, location: Location, audioPlayer: AudioPlayer) {
     val isExpanded = remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -102,14 +101,14 @@ fun LocationCard(tour: TourResponse, location: Location) {
                             text = location.proximityValue.toString() + " m",
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        if(isCloseToLocation(location.proximityValue)){
-                        Chip(text = "ahora cerca")
+                        if(location.isNear()) {
+                            Chip(text = "ahora cerca")
                         }
                     }
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.Center, modifier = Modifier.width(40.dp)) {
-                    AudioButton(tour, location)
+                    AudioButton(tour, location, audioPlayer)
                 }
             }
             // If the card is expanded, show the description
@@ -125,30 +124,29 @@ fun LocationCard(tour: TourResponse, location: Location) {
 // create two icon buttons namely play and pause
 // Calling this function as content in the above function
 @Composable
-fun AudioButton(tour: TourResponse, location: Location) {
-    val audioPlayer = AudioPlayer()
-    val isPlaying by audioPlayer.isPlaying.collectAsState()
+fun AudioButton(tour: TourResponse, location: Location, audioPlayer: AudioPlayer) {
+    val playingData = audioPlayer.playingData.collectAsState().value
     val playIcon = painterResource(R.drawable.ic_play_circle_green)
     val playIconDisabled = painterResource(R.drawable.ic_play_circle_disabled)
     val pauseIcon = painterResource(R.drawable.ic_pause)
 
     IconButton(
         onClick = {
-            if (isPlaying) audioPlayer.pause()
+            if (playingData.isTourLocation(tour, location))
+                audioPlayer.alternate()
             else
-                if(isCloseToLocation(location.proximityValue)) {
-                    audioPlayer.play(tour, location)
-                }
+                if(location.isNear())
+                    audioPlayer.playTourLocation(tour, location)
         }
     ) {
         Icon(
-            painter = if (isPlaying) pauseIcon
-            else if(isCloseToLocation(location.proximityValue)){
+            painter = if (playingData.isPlayingTourLocation(tour, location))
+                pauseIcon
+            else if(location.isNear())
                 playIcon
-                }
             else playIconDisabled,
-            contentDescription = if (isPlaying) stringResource(id = R.string.pause_audio)
-                                    else if(isCloseToLocation(location.proximityValue)){
+            contentDescription = if (playingData.isPlayingTourLocation(tour, location)) stringResource(id = R.string.pause_audio)
+                                    else if(location.isNear()){
                                              stringResource(id = R.string.play_audio)
                                         }
                                         else stringResource(id = R.string.play_audio_disabled)
@@ -188,19 +186,17 @@ fun Chip(
     }
 }
 
-private fun isCloseToLocation(proximityValue:Int):Boolean = proximityValue < 100
-
 //********************** PREVIEWS **********************//
 @Composable
 @Preview
 private fun LocationCardPreview() {
-    LocationCard(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocation())
+    LocationCard(MockToursAPI.sampleTour(), LocationAPIWithRetrofit.sampleLocation(), AudioPlayer())
 }
 
 @Composable
 @Preview
 fun LocationListPreview() {
-    LocationList(MockToursAPI.sampleTour(), MapViewModel())
+    LocationList(MockToursAPI.sampleTour(), MapViewModel(), AudioPlayer())
 }
 
 

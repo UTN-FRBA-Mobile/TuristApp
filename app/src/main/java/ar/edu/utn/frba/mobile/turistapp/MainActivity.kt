@@ -1,6 +1,6 @@
 package ar.edu.utn.frba.mobile.turistapp
 
-import MapScreen
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.map.MapScreen
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ar.edu.utn.frba.mobile.turistapp.core.repository.FavoritesRepository
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
 import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.home.HomeScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourScreen
@@ -64,6 +65,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun App(mapViewModel: MapViewModel) {
     val navController = rememberNavController()
+    val audioPlayer = AudioPlayer()
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {
             HomeScreen(navController = navController)
@@ -81,7 +83,7 @@ private fun App(mapViewModel: MapViewModel) {
         ) { backStackEntry ->
             val tourId = backStackEntry.arguments?.getInt("tourId")
             if (tourId is Int)
-                MapScreen(mapViewModel, tourId, navController)
+                MapScreen(mapViewModel, audioPlayer, tourId, navController)
         }
     }
 }
