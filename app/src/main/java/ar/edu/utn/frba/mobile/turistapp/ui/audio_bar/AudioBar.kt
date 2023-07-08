@@ -46,7 +46,7 @@ fun AudioBar(audioPlayer: AudioPlayer) {
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .background(Color.Black)
+            .background(Color.White)
             .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -64,7 +64,7 @@ fun AudioBar(audioPlayer: AudioPlayer) {
             )
             Box(
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(Color.Black)
                     .fillMaxHeight()
                     .fillMaxWidth(currentPosition)
             )
