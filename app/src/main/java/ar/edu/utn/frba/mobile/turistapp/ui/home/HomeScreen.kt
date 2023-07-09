@@ -14,9 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -37,30 +35,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ar.edu.utn.frba.mobile.turistapp.R
-import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
 import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
-import coil.compose.ImagePainter
-import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavController? = null) {
-    val nearbyToursState = viewModel.nearbyTours.observeAsState()
+    val selectedLanguage = remember { mutableStateOf(LocaleUtils.currentLocale()) }
     val favoriteToursState = viewModel.favoriteTours.observeAsState()
+
+    //LaunchedEffect se encargará de llamar a getNearbyTours cada vez que cambie selectedLanguage.
+    // Así, cuando el usuario seleccione un nuevo idioma, se buscarán los tours en el idioma
+    // seleccionado y se actualizará la UI.
+    LaunchedEffect(selectedLanguage.value) {
+        viewModel.getNearbyTours(selectedLanguage.value)
+    }
+
+    val nearbyToursState = viewModel.nearbyTours.observeAsState()
     val nearbyTours = nearbyToursState.value
     val favoriteTours = favoriteToursState.value
+
     HomeScreenView(nearbyTours, favoriteTours, navController)
 }
 
@@ -144,8 +147,7 @@ fun LanguageDialog(
                                 selected = item == selectedLanguage.value, // Comparar con el valor actual de selectedLanguage
                                 onClick = {
                                     LocaleUtils.setLocale(context, item)
-                                    selectedLanguage.value =
-                                        item // Actualizar el valor de selectedLanguage cuando se selecciona un nuevo item
+                                    selectedLanguage.value = item
                                     (context as? Activity)?.recreate()
                                 },
                                 role = Role.RadioButton
@@ -252,8 +254,3 @@ fun Loading() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreenView(MockToursAPI.sampleTours(), MockToursAPI.sampleTours())
-}
