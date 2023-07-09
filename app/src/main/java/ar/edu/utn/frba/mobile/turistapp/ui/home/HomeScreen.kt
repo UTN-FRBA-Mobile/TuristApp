@@ -15,7 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +27,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -36,7 +36,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +51,8 @@ import ar.edu.utn.frba.mobile.turistapp.core.api.MockToursAPI
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
 import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
+import coil.compose.ImagePainter
+import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -62,8 +67,13 @@ fun HomeScreen(viewModel: ToursViewModel = viewModel(), navController: NavContro
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenView(nearbyTours: List<MinifiedTour>?, favoriteTours: List<MinifiedTour>?, navController: NavController? = null) {
+fun HomeScreenView(
+    nearbyTours: List<MinifiedTour>?,
+    favoriteTours: List<MinifiedTour>?,
+    navController: NavController? = null
+) {
     val openLanguageDialog = remember { mutableStateOf(false) }
+    val selectedLanguage = remember { mutableStateOf(LocaleUtils.currentLocale()) }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -76,7 +86,8 @@ fun HomeScreenView(nearbyTours: List<MinifiedTour>?, favoriteTours: List<Minifie
                         openLanguageDialog.value = true
                     }) {
                         Icon(
-                            imageVector = Icons.Filled.Settings,
+                            painter = changeIconLenguage(selectedLanguage.value),
+                            tint = Color.Unspecified,
                             contentDescription = stringResource(R.string.selectLanguage)
                         )
                     }
@@ -99,13 +110,16 @@ fun HomeScreenView(nearbyTours: List<MinifiedTour>?, favoriteTours: List<Minifie
         }
     }
     if (openLanguageDialog.value) {
-        LanguageDialog(openLanguageDialog)
+        LanguageDialog(openLanguageDialog, selectedLanguage)
     }
 }
 
 @SuppressLint("DiscouragedApi")
 @Composable
-fun LanguageDialog(openLanguageDialog: MutableState<Boolean>) {
+fun LanguageDialog(
+    openLanguageDialog: MutableState<Boolean>,
+    selectedLanguage: MutableState<AvailableLanguages>
+) {
     val languages = AvailableLanguages.values()
     val context = LocalContext.current
 
@@ -117,35 +131,38 @@ fun LanguageDialog(openLanguageDialog: MutableState<Boolean>) {
             Text(text = stringResource(R.string.selectLanguage))
         },
         text = {
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .selectableGroup()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .selectableGroup()
+            ) {
                 languages.forEach { item ->
                     LabelledRadioButton(
                         modifier = Modifier
                             .fillMaxWidth()
                             .selectable(
-                                selected = item == LocaleUtils.currentLocale(),
+                                selected = item == selectedLanguage.value, // Comparar con el valor actual de selectedLanguage
                                 onClick = {
                                     LocaleUtils.setLocale(context, item)
+                                    selectedLanguage.value =
+                                        item // Actualizar el valor de selectedLanguage cuando se selecciona un nuevo item
                                     (context as? Activity)?.recreate()
                                 },
                                 role = Role.RadioButton
                             ),
-                        label = stringResource(id = context.resources.getIdentifier(item.resStringName, "string", context.packageName)),
-                        selected = item == LocaleUtils.currentLocale()
+                        label = stringResource(
+                            id = context.resources.getIdentifier(
+                                item.resStringName,
+                                "string",
+                                context.packageName
+                            )
+                        ),
+                        selected = item == selectedLanguage.value // Comparar con el valor actual de selectedLanguage
                     )
                 }
             }
         },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    openLanguageDialog.value = false
-                }
-            ) {
-                Text(stringResource(R.string.confirm))
-            }
         }
     )
 }
@@ -174,7 +191,11 @@ fun LabelledRadioButton(
 }
 
 @Composable
-fun Tours(nearbyTours: List<MinifiedTour>, favoriteTours: List<MinifiedTour>, navController: NavController? = null) {
+fun Tours(
+    nearbyTours: List<MinifiedTour>,
+    favoriteTours: List<MinifiedTour>,
+    navController: NavController? = null
+) {
     LazyColumn {
         item {
             Text(
@@ -198,6 +219,17 @@ fun Tours(nearbyTours: List<MinifiedTour>, favoriteTours: List<MinifiedTour>, na
         }
     }
 }
+
+@Composable
+fun changeIconLenguage(lenguage: AvailableLanguages): Painter {
+
+    if (lenguage == AvailableLanguages.English) {
+        return painterResource(R.drawable.us)
+    }
+    return painterResource(R.drawable.es)
+
+}
+
 
 @Composable
 fun Loading() {
