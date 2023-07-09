@@ -32,9 +32,6 @@ fun TourRowPreview() {
 
 @Composable
 fun TourRow(tour: MinifiedTour, navController: NavController? = null) {
-    val descriptionElement: List<String>? = (tour.description.find { it[0] == LocaleUtils.currentLocaleCode() } ?: tour.description.find { it[0] == "en" })
-    val description: String = descriptionElement!![1]
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(10.dp)
@@ -68,7 +65,7 @@ fun TourRow(tour: MinifiedTour, navController: NavController? = null) {
                         fontWeight = FontWeight.Bold
                     )
                 )
-                Text(text = description)
+                Text(text = tour.description)
                 Text(text = tour.distance.toString() + " km")
                 Text(text = tour.languages.joinToString(" | "))
             }

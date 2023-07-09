@@ -3,6 +3,7 @@ package ar.edu.utn.frba.mobile.turistapp.core.api
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourResponse
 import ar.edu.utn.frba.mobile.turistapp.core.models.TourReview
+import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
 import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
 
 interface ToursAPI {
@@ -12,7 +13,12 @@ interface ToursAPI {
 
 class MockToursAPI: ToursAPI {
     override suspend fun getNearbyTours(): List<MinifiedTour> {
-        return TourRetriever.retrofit.retrieveHomeTours().tours
+        return when(LocaleUtils.currentLocale()) {
+            AvailableLanguages.English -> TourRetriever.retrofit.retrieveHomeTours().tours_en
+            AvailableLanguages.Spanish -> TourRetriever.retrofit.retrieveHomeTours().tours_es
+        }
+
+
     }
 
     override suspend fun getTour(id: Int): TourResponse {
@@ -25,9 +31,7 @@ class MockToursAPI: ToursAPI {
                 MinifiedTour(
                     1,
                     "Buenos Aires City Center",
-                    setOf(
-                        listOf("en", "Obelisco, Puerto Madero, La Boca")
-                    ),
+                    "Obelisco, Puerto Madero, La Boca",
                     setOf("English", "Spanish"),
                     2.0,
                     "http://image.url/test.jpg"
@@ -35,9 +39,7 @@ class MockToursAPI: ToursAPI {
                 MinifiedTour(
                     2,
                     "Buenos Aires City Center 2",
-                    setOf(
-                        listOf("Casa Rosada, Obelisco, Teatro Colón"),
-                    ),
+                    "Casa Rosada, Obelisco, Teatro Colón",
                     setOf("Spanish"),
                     1.2,
                     "http://image.url/test.jpg"

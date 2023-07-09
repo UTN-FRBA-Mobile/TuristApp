@@ -1,12 +1,9 @@
 {
-	"tours": [
+	"tours_es": [
 		{
 			"id": 1,
 			"title": "Centro de la ciudad de Buenos Aires",
-			"description": [
-				["es", "Congreso Nacional, el Obelisco y más puntos clásicos de la ciudad"],
-				["en", 	"National Congress, Obelisk and more classic points of the city"]
-			],
+			"description": "Congreso Nacional, el Obelisco y más puntos clásicos de la ciudad",
 			"languages": [
 				"Inglés",
 				"Español"
@@ -17,12 +14,32 @@
 		{
 			"id": 2,
 			"title": "Centro histórico de Buenos Aires",
-			"description": [
-				["es", "Teatro Colón, Casa Rosada, Café Tortoni"],
-				["en", "Colon Theater, Pink House, Tortoni Cafe"]
-			],
+			"description": "Teatro Colón, Casa Rosada, Café Tortoni",
 			"languages": [
 				"Español"
+			],
+			"distance": 1.2,
+			"image": "https://media.staticontent.com/media/pictures/11699700-cd97-4f9e-b5cb-828c5092efdf"
+		}
+	],
+	"tours_en": [
+		{
+			"id": 1,
+			"title": "Downtown Buenos Aires",
+			"description": "National Congress, Obelisk and more classic points of the city",
+			"languages": [
+				"English",
+				"Spanish"
+			],
+			"distance": 2,
+			"image": "https://el-pais.brightspotcdn.com/dims4/default/bef130e/2147483647/strip/true/crop/930x639+0+22/resize/1440x990!/quality/90/?url=https%3A%2F%2Fel-pais-uruguay-production-web.s3.amazonaws.com%2Fbrightspot%2Fuploads%2F2022%2F08%2F12%2F62f6ac43c99e6.jpeg"
+		},
+		{
+			"id": 2,
+			"title": "Historical center of Buenos Aires",
+			"description": "Colon Theater, Pink House, Tortoni Cafe",
+			"languages": [
+				"Spanish"
 			],
 			"distance": 1.2,
 			"image": "https://media.staticontent.com/media/pictures/11699700-cd97-4f9e-b5cb-828c5092efdf"

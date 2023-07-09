@@ -98,7 +98,8 @@ fun TourScreenView(tour: TourResponse?, viewModel: TourViewModel? = null, isFavo
                         Icon(
                             painter = painterResource(heartIcon),
                             contentDescription = null,
-                            modifier = Modifier.height(24.dp)
+                            tint = Color.Unspecified,
+                            modifier = Modifier.height(32.dp)
                         )
                     }
                 }
