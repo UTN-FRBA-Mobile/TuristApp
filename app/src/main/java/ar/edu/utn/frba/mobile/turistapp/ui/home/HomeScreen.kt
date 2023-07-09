@@ -86,7 +86,7 @@ fun HomeScreenView(
                         openLanguageDialog.value = true
                     }) {
                         Icon(
-                            painter = changeIconLenguage(selectedLanguage.value),
+                            painter = ChangeIconLanguage(selectedLanguage.value),
                             tint = Color.Unspecified,
                             contentDescription = stringResource(R.string.selectLanguage)
                         )
@@ -217,19 +217,30 @@ fun Tours(
         favoriteTours.forEach { tour ->
             item { FavoriteTourRow(tour, navController) }
         }
+        item {
+            NoFavorites(isVisible = favoriteTours.isEmpty())
+        }
     }
 }
 
 @Composable
-fun changeIconLenguage(lenguage: AvailableLanguages): Painter {
+fun NoFavorites(isVisible: Boolean) {
+    if(isVisible){
+        Text(
+            text = stringResource(R.string.nofavorites),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+        )
+    }
+}
 
-    if (lenguage == AvailableLanguages.English) {
+@Composable
+fun ChangeIconLanguage(language: AvailableLanguages): Painter {
+    if (language == AvailableLanguages.English) {
         return painterResource(R.drawable.us)
     }
     return painterResource(R.drawable.es)
-
 }
-
 
 @Composable
 fun Loading() {

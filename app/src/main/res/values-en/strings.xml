@@ -3,6 +3,7 @@
     <string name="tours">Tours</string>
     <string name="nearbyTours">Nearby Tours</string>
     <string name="favorites">Favorites</string>
+    <string name="nofavorites">You don\'t have favorites yet.</string>
     <string name="locations">Locations</string>
 
     <string name="selectLanguage">Select language</string>
