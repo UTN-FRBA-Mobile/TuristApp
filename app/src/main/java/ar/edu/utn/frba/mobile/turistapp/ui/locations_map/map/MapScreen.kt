@@ -1,7 +1,8 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.map
 
-import GoogleMapScreen
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.GoogleMapScreen
 import android.annotation.SuppressLint
+import android.app.Application
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,16 +61,15 @@ fun MapScreen(mapViewModel: MapViewModel, audioPlayer: AudioPlayer, tourId: Int,
     val tourState = tourViewModel.tour.observeAsState()
     val tour = tourState.value
     val locations = locationListViewModel.locations.observeAsState().value
-    val context = LocalContext.current
     val playingData = audioPlayer.playingData.collectAsState().value
 
-    LaunchedEffect(key1 = Unit) {
-        mapViewModel.startLocationUpdates(context)
+    LaunchedEffect(tourId) {
+        mapViewModel.startLocationUpdates()
     }
 
     DisposableEffect(key1 = mapViewModel) {
         onDispose {
-            mapViewModel.stopLocationUpdates(context)
+            mapViewModel.stopLocationUpdates()
         }
     }
 
@@ -113,7 +113,7 @@ fun MapScreen(mapViewModel: MapViewModel, audioPlayer: AudioPlayer, tourId: Int,
                     BottomSheetScaffold(
                         mapScreen = { GoogleMapScreen(mapViewModel, locations) },
                         listTitle = { Title(name = stringResource(id = R.string.locations)) },
-                        listContent = { LocationListScreen(tour, mapViewModel, audioPlayer) }
+                        listContent = { LocationListScreen(tour, locations, mapViewModel, audioPlayer) }
                     ) }
                     if (playingData.isActive())
                         AudioBar(audioPlayer)
@@ -189,7 +189,8 @@ fun BottomSheetScaffoldPreview() {
         listContent = {
             LocationListScreen(
                 MockToursAPI.sampleTour(),
-                MapViewModel(),
+                listOf(),
+                MapViewModel(LocalContext.current as Application),
                 AudioPlayer()
             )
         }

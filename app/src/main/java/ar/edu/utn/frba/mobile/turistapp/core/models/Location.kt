@@ -1,5 +1,8 @@
 package ar.edu.utn.frba.mobile.turistapp.core.models
 
+import ar.edu.utn.frba.mobile.turistapp.core.utils.DistanceUtils
+import com.google.android.gms.maps.model.LatLng
+
 data class Location (
     val order: Int,
     val name: String,
@@ -9,5 +12,11 @@ data class Location (
     val latitude: Double,
     val longitude: Double
 ) {
-    fun isNear(): Boolean = proximityValue < 100
+    fun isNear(actualPosition: LatLng): Boolean = distance(actualPosition) < 100
+
+    fun distance(actualPosition: LatLng): Double {
+        return DistanceUtils.calculateDistance(
+            LatLng(latitude, longitude), actualPosition
+        )
+    }
 }

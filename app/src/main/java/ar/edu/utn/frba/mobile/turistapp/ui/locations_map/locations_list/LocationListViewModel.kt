@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.turistapp.ui.locations_map.locations_list
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.liveData
@@ -23,7 +22,6 @@ class LocationListViewModel(tourId: Int, private val locationApi: LocationAPI = 
 
     val locations = liveData(Dispatchers.IO) {
         emit(null)
-
         emit(locationApi.getTourLocations(tourId))
     }
 }
