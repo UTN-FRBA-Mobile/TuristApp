@@ -26,8 +26,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -74,6 +76,7 @@ fun LocationList(tour: TourResponse, locations: List<Location>, viewModel: MapVi
 fun LocationCard(tour: TourResponse, location: Location, viewModel: MapViewModel, audioPlayer: AudioPlayer) {
     val isExpanded = remember { mutableStateOf(false) }
     val currentPosition = viewModel.currentLocation.collectAsState().value
+    val playedAudiosOrderNumbers =  remember { mutableStateOf(IntArray(0)) }
 
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -110,6 +113,11 @@ fun LocationCard(tour: TourResponse, location: Location, viewModel: MapViewModel
                         )
                         if(currentPosition != null && location.isNear(currentPosition)) {
                             Chip(text = "ahora cerca")
+                            // Si estamos cerca de la posición actual y el audio del location no fue reproducido, play audio
+                            if(!playedAudiosOrderNumbers.value.contains(location.order)) {
+                                audioPlayer.playTourLocation(tour, location)
+                                playedAudiosOrderNumbers.value = playedAudiosOrderNumbers.value + location.order
+                            }
                         }
                     }
                 }
