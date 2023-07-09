@@ -1,4 +1,6 @@
 # TuristApp
+![TuristApp logo](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/TuristApp_logo_mediano.png "TuristApp logo")
+
 🌍 ¡Descubrí una forma nueva de recorrer con TouristApp! Transformá tu celular en tu guía personal de viaje 📲 y llevá tus experiencias turísticas a un nivel completamente distinto.
 
 ¿Cansado de la lectura pesada de los folletos y mapas convencionales 🗺️? ¿Querés sentir la libertad de descubrir a tu propio ritmo 🏃‍♂️ sin perderte los detalles interesantes sobre los lugares que visitás? Con TouristApp, te damos la posibilidad de disfrutar de los lugares más emblemáticos de tu destino mientras escuchás fascinantes historias y curiosidades sobre ellos. 
@@ -6,7 +8,7 @@
 2. Elegí una ruta 🛣️ 
 3. Empezá a caminar 🚶🏽‍♀️, ¡nosotros nos encargamos del resto! 👍
 
-Características destacadas de TouristApp:
+## Características destacadas de TouristApp:
 
 **Tours de audio precargados**: 🎶 Descubrí cientos de rutas interesantes con historias cautivantes y datos intrigantes relatados por expertos locales. 🕵️‍♂️
 
@@ -18,3 +20,18 @@ Características destacadas de TouristApp:
 Con TouristApp, no solo estás obteniendo una guía turística 🗺️, estás convirtiendo tu viaje en una experiencia única llena de descubrimiento y aventura 🚀. Animate a experimentar la ciudad de una forma totalmente nueva, sencilla y emocionante 💃.
 
 No esperes más, descargá TouristApp 📲 y ¡empezá a explorar como nunca antes! 🌟
+
+## Capturas de pantalla
+### Home de la app
+![](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/home_sin_favoritos.png "")
+
+### Detalle de un Tour
+![](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/Tour_descripción.gif "")
+
+### Mapa con los puntos de interés del tour
+![](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/Tour_mapa.gif "")
+
+### Cambio de idioma desde la home de la app
+![](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/Selección_idioma.png "")
+
+
