@@ -1,7 +1,6 @@
 package ar.edu.utn.frba.mobile.turistapp.core.api
 
 import ar.edu.utn.frba.mobile.turistapp.core.models.Location
-import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
 import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
 
 interface LocationAPI {
@@ -11,10 +10,7 @@ interface LocationAPI {
 
 class LocationAPIWithRetrofit : LocationAPI {
     override suspend fun getTourLocations(id: Int): List<Location> {
-        when(LocaleUtils.currentLocale()) {
-            AvailableLanguages.English -> return LocationRetriever.retrofit.retrieveTourLocations_en()
-            AvailableLanguages.Spanish -> return LocationRetriever.retrofit.retrieveTourLocations_es()
-        }
+        return LocationRetriever.retrofit.retrieveTourLocation(id.toString(), LocaleUtils.currentLocaleCode())
 }
 
     companion object {

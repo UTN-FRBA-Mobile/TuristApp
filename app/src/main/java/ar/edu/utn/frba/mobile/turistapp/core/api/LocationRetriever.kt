@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object LocationRetriever {
-    private const val BASE_URL = "https://run.mocky.io/v3/"
+    private const val BASE_URL = "https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/api/"
 
     val retrofit by lazy {
         Retrofit.Builder()
