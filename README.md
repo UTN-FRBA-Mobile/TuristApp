@@ -35,6 +35,7 @@ No esperes más, descargá TouristApp 📲 y ¡empezá a explorar como nunca ant
 ![](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/Tour_mapa.gif "")
 
 ### Cambio de idioma desde la home de la app
-![](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/Selección_idioma.png "")
+![image](https://github.com/UTN-FRBA-Mobile/TuristApp/assets/48845712/86584e6f-86a5-438c-a49f-f3d2642a43e7)
+
 
 
