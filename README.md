@@ -1,5 +1,8 @@
 # TuristApp
-![TuristApp logo](https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/TuristApp_logo_mediano.png "TuristApp logo")
+<div align="center">
+    <img src="https://raw.githubusercontent.com/UTN-FRBA-Mobile/TuristApp/main/imagenes/TuristApp_logo_mediano.png">
+</div>
+
 
 🌍 ¡Descubrí una forma nueva de recorrer con TouristApp! Transformá tu celular en tu guía personal de viaje 📲 y llevá tus experiencias turísticas a un nivel completamente distinto.
 
