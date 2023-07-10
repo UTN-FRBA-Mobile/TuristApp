@@ -1,6 +1,5 @@
 package ar.edu.utn.frba.mobile.turistapp
 
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.map.MapScreen
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -9,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,12 +17,18 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ar.edu.utn.frba.mobile.turistapp.core.repository.FavoritesRepository
 import ar.edu.utn.frba.mobile.turistapp.core.utils.AudioPlayer
-import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
 import ar.edu.utn.frba.mobile.turistapp.ui.home.HomeScreen
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.googleMaps.MapViewModel
+import ar.edu.utn.frba.mobile.turistapp.ui.locations_map.map.MapScreen
+import ar.edu.utn.frba.mobile.turistapp.ui.login.LoginScreen
 import ar.edu.utn.frba.mobile.turistapp.ui.tour.TourScreen
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -66,7 +72,14 @@ class MainActivity : ComponentActivity() {
 private fun App(mapViewModel: MapViewModel) {
     val navController = rememberNavController()
     val audioPlayer = AudioPlayer()
-    NavHost(navController = navController, startDestination = "home") {
+
+    val currentUser = Firebase.auth.currentUser
+    val startDestination = if(currentUser != null) "home" else "login"
+
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable("login") {
+            LoginScreen(navController = navController)
+        }
         composable("home") {
             HomeScreen(navController = navController)
         }

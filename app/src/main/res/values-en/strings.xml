@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">TuristApp</string>
+    <string name="welcome">Welcome!</string>
+    <string name="googleLogin">Login with Google</string>
     <string name="tours">Tours</string>
     <string name="nearbyTours">Nearby Tours</string>
     <string name="favorites">Favorites</string>

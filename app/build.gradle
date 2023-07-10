@@ -4,6 +4,7 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 apply plugin: 'com.google.dagger.hilt.android'
@@ -71,6 +72,9 @@ dependencies {
     implementation 'com.google.maps.android:maps-compose:2.8.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.firebase:firebase-common-ktx:20.3.3'
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -100,6 +104,9 @@ dependencies {
     // For local unit tests
     testImplementation 'com.google.dagger:hilt-android-testing:2.46.1'
     kaptTest 'com.google.dagger:hilt-compiler:2.46.1'
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
 }
 
 kapt {
