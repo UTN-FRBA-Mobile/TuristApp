@@ -1,0 +1,47 @@
+[
+  {
+    "order": 1,
+    "name": "National Congress",
+    "description": "Neoclassical building of the Argentine parliament; includes tours of its chamber and Eva Peron's Pink Room.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.609692623910114,
+    "longitude": -58.39249095399582
+  },
+  {
+    "order": 2,
+    "name": "Obelisk",
+    "description": "Emblematic white stone monument from Cordoba, inaugurated in 1936; it is a popular meeting point.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.6034004102153,
+    "longitude": -58.381898911996814
+  },
+  {
+    "order": 3,
+    "name": "Colon Theater",
+    "description": "This 1908 theater is famous for its acoustics; classical music concerts, opera, and ballet performances are held here.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.60085638683929,
+    "longitude": -58.383462776460235
+  },
+  {
+    "order": 4,
+    "name": "Pink House",
+    "description": "Venerable pink palace that is the seat of national executive power; guided tours are offered.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.60792437262599,
+    "longitude": -58.37032289245685
+  },
+  {
+    "order": 5,
+    "name": "Tortoni Cafe",
+    "description": "Iconic French-style cafe opened in 1858 and favorite place of the cultural elite with live tango.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.608604217090424,
+    "longitude": -58.378208229447154
+  }
+]

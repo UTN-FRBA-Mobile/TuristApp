@@ -1,0 +1,29 @@
+[
+  {
+    "order": 1,
+    "name": "Teatro Colon",
+    "description": "Este teatro de 1908 es famoso por su acústica; se realizan conciertos de música clásica, ópera y ballet.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.60085638683929,
+    "longitude": -58.383462776460235
+  },
+  {
+    "order": 2,
+    "name": "Casa Rosada",
+    "description": "Palacio venerable de color rosa que es sede del poder ejecutivo nacional; se ofrecen visitas guiadas.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.60792437262599,
+    "longitude": -58.37032289245685
+  },
+  {
+    "order": 3,
+    "name": "Café Tortoni",
+    "description": "Icónico café estilo francés inaugurado en 1858 y lugar favorito de la élite cultural con tango en vivo.",
+    "proximityLabel": "",
+    "proximityValue": 0,
+    "latitude": -34.608604217090424,
+    "longitude": -58.378208229447154
+  }
+]
