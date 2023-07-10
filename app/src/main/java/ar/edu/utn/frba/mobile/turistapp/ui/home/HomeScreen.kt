@@ -46,6 +46,7 @@ import ar.edu.utn.frba.mobile.turistapp.R
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
 import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -77,6 +78,7 @@ fun HomeScreenView(
 ) {
     val openLanguageDialog = remember { mutableStateOf(false) }
     val selectedLanguage = remember { mutableStateOf(LocaleUtils.currentLocale()) }
+    val auth = FirebaseAuth.getInstance()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -92,6 +94,16 @@ fun HomeScreenView(
                             painter = ChangeIconLanguage(selectedLanguage.value),
                             tint = Color.Unspecified,
                             contentDescription = stringResource(R.string.selectLanguage)
+                        )
+                    }
+                    IconButton(onClick = {
+                        auth.signOut()
+                        navController?.navigate("login")
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.logout),
+                            tint = Color.Unspecified,
+                            contentDescription = "Cerrar sesión"
                         )
                     }
                 }
