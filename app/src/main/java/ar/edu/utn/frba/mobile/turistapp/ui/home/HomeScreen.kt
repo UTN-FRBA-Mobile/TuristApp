@@ -46,7 +46,8 @@ import ar.edu.utn.frba.mobile.turistapp.R
 import ar.edu.utn.frba.mobile.turistapp.core.models.MinifiedTour
 import ar.edu.utn.frba.mobile.turistapp.core.utils.AvailableLanguages
 import ar.edu.utn.frba.mobile.turistapp.core.utils.LocaleUtils
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -78,7 +79,9 @@ fun HomeScreenView(
 ) {
     val openLanguageDialog = remember { mutableStateOf(false) }
     val selectedLanguage = remember { mutableStateOf(LocaleUtils.currentLocale()) }
-    val auth = FirebaseAuth.getInstance()
+
+    val token = "754150192109-f0a45itg6kbg7fig4iisqqjqav3drblo.apps.googleusercontent.com"
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -97,7 +100,11 @@ fun HomeScreenView(
                         )
                     }
                     IconButton(onClick = {
-                        auth.signOut()
+                        GoogleSignIn.getClient(context, GoogleSignInOptions
+                            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(token)
+                            .requestEmail()
+                            .build()).revokeAccess()
                         navController?.navigate("login")
                     }) {
                         Icon(
